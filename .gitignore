@@ -1,4 +1,4 @@
-archiso/work/
-archiso/out/
+distro/archiso/work/
+distro/archiso/out/
 *.iso
 *.log
