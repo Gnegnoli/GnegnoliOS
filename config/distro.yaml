@@ -1,0 +1,35 @@
+name: GnegnoliOS
+id: gnegnolios
+version: "0.1-alpha"
+
+base:
+  distro: archlinux
+
+kernel:
+  default: linux
+  available:
+    - linux
+    - linux-lts
+    - linux-zen
+
+desktop:
+  default: kde
+  available:
+    - kde
+    - gnome
+    - hyprland
+    - unity
+
+filesystem:
+  default: btrfs
+  available:
+    - btrfs
+    - ext4
+
+package_manager:
+  - pacman
+  - paru
+  - flatpak
+
+repository:
+  - gnegnolios-core
