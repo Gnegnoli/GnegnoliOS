@@ -1,9 +1,18 @@
+# ==========================================================
+# GnegnoliOS Distribution Manifest
+# ==========================================================
+
 name: GnegnoliOS
 id: gnegnolios
 version: "0.1-alpha"
 
 base:
   distro: archlinux
+  architecture: x86_64
+
+branding:
+  name: GnegnoliOS
+  codename: Genesis
 
 kernel:
   default: linux
@@ -27,9 +36,16 @@ filesystem:
     - ext4
 
 package_manager:
-  - pacman
+  default: pacman
+
+additional_package_managers:
   - paru
   - flatpak
 
-repository:
+repositories:
   - gnegnolios-core
+
+profiles:
+  - gaming
+  - development
+  - office
