@@ -11,11 +11,6 @@ PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 CONFIG_FILE="$PROJECT_ROOT/config/distro.yaml"
 ARCHISO_DIR="$PROJECT_ROOT/distro/archiso"
 
-echo "Project root : $PROJECT_ROOT"
-echo "Config file  : $CONFIG_FILE"
-echo "ArchISO path : $ARCHISO_DIR"
-echo
-
 echo "Checking configuration..."
 
 if [ ! -f "$CONFIG_FILE" ]; then
@@ -23,6 +18,16 @@ if [ ! -f "$CONFIG_FILE" ]; then
     exit 1
 fi
 
-echo "Configuration OK."
+DISTRO_NAME=$(yq '.name' "$CONFIG_FILE")
+DISTRO_VERSION=$(yq '.version' "$CONFIG_FILE")
+DEFAULT_KERNEL=$(yq '.kernel.default' "$CONFIG_FILE")
+DEFAULT_DESKTOP=$(yq '.desktop.default' "$CONFIG_FILE")
+
 echo
-echo "Build system initialized."
+echo "Distribution : $DISTRO_NAME"
+echo "Version      : $DISTRO_VERSION"
+echo "Kernel       : $DEFAULT_KERNEL"
+echo "Desktop      : $DEFAULT_DESKTOP"
+
+echo
+echo "Configuration successfully loaded."
