@@ -1,0 +1,14 @@
+NAME="GnegnoliOS"
+PRETTY_NAME="GnegnoliOS"
+ID=gnegnolios
+ID_LIKE=arch
+BUILD_ID=rolling
+
+ANSI_COLOR="38;2;220;30;30"
+
+HOME_URL="https://github.com/<tuo-repository>"
+DOCUMENTATION_URL="https://github.com/<tuo-repository>"
+SUPPORT_URL="https://github.com/<tuo-repository>"
+BUG_REPORT_URL="https://github.com/<tuo-repository>"
+
+LOGO=archlinux-logo

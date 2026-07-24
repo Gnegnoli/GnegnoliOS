@@ -1,4 +1,27 @@
-distro/archiso/work/
-distro/archiso/out/
-*.iso
+# Build output
+work/
+out/
+
+# Package build artifacts
+packages/*/pkg/
+packages/*/src/
+packages/*.pkg.tar.zst
+packages/*/*.pkg.tar.zst
+
+# Logs
 *.log
+
+# Temporary files
+*.tmp
+*.bak
+*~
+
+# Editor
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+
+# macOS
+.DS_Store
