@@ -1,0 +1,26 @@
+pkgname=gnegnolios-release
+pkgver=0.1
+pkgrel=1
+pkgdesc="Release files for GnegnoliOS"
+arch=('any')
+license=('custom')
+
+source=(
+    "os-release"
+    "os-release.etc"
+)
+
+sha256sums=(
+    'SKIP'
+    'SKIP'
+)
+
+package() {
+
+    install -Dm644 "$srcdir/os-release" \
+        "$pkgdir/usr/lib/os-release"
+
+    install -Dm644 "$srcdir/os-release.etc" \
+        "$pkgdir/etc/os-release"
+
+}
