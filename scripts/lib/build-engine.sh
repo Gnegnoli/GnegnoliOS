@@ -8,6 +8,8 @@ run_build() {
 
     validate_configuration
 
+    choose_desktop
+
     show_configuration
 
     echo "Generating project files..."
@@ -25,5 +27,4 @@ run_build() {
     echo "========================================="
     echo " Build completed successfully."
     echo "========================================="
-
 }

@@ -6,7 +6,7 @@ xdata = pkgtype=pkg
 pkgver = 0.1-1
 pkgdesc = Release files for GnegnoliOS
 url = 
-builddate = 1784888494
+builddate = 1784888814
 packager = Unknown Packager
 size = 520
 arch = any
