@@ -1,0 +1,8 @@
+id: development
+
+packages:
+  - git
+  - github-cli
+  - neovim
+  - docker
+  - docker-compose

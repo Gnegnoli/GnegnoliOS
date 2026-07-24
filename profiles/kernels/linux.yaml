@@ -1,0 +1,5 @@
+id: linux
+
+packages:
+  - linux
+  - linux-headers

@@ -1,0 +1,15 @@
+id: kde
+
+name: KDE Plasma
+
+packages:
+  - plasma-meta
+  - kde-applications-meta
+  - sddm
+
+services:
+  - sddm
+
+display_manager: sddm
+
+session: plasma

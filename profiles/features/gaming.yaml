@@ -1,0 +1,7 @@
+id: gaming
+
+packages:
+  - steam
+  - lutris
+  - gamemode
+  - mangohud
