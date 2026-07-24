@@ -1,9 +1,9 @@
-NAME="GnegnoliOS"
-PRETTY_NAME="GnegnoliOS Alpha"
-ID=gnegnolios
+NAME=""GnegnoliOS""
+PRETTY_NAME=""GnegnoliOS" "0.1-alpha""
+ID="gnegnolios"
 ID_LIKE=arch
-VERSION="0.1 Alpha"
-VERSION_ID=0.1
+VERSION=""0.1-alpha""
+VERSION_ID=""0.1-alpha""
 HOME_URL="https://gnegnolios.org"
 SUPPORT_URL="https://github.com/GnegnoliOS"
 BUG_REPORT_URL="https://github.com/GnegnoliOS"

@@ -47,13 +47,21 @@ validate_configuration() {
 
 show_configuration() {
 
-    echo
     echo "Distribution : $DISTRO_NAME"
     echo "Version      : $DISTRO_VERSION"
     echo "Kernel       : $DEFAULT_KERNEL"
     echo "Desktop      : $DEFAULT_DESKTOP"
     echo
 
+}
+
+generate_files() {
+
+    echo "Generating project files..."
+
+    "$PROJECT_ROOT/scripts/generate-os-release.sh"
+
+    echo
 }
 
 main() {
@@ -66,7 +74,9 @@ main() {
 
     show_configuration
 
-    echo "Configuration successfully loaded."
+    generate_files
+
+    echo "Build preparation completed successfully."
 
 }
 
