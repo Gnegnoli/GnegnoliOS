@@ -7,6 +7,7 @@ CONFIG_FILE="$PROJECT_ROOT/config/distro.yaml"
 ARCHISO_DIR="$PROJECT_ROOT/distro/archiso"
 
 source "$PROJECT_ROOT/scripts/lib/config.sh"
+source "$PROJECT_ROOT/scripts/lib/packages.sh"
 
 print_banner() {
 
@@ -49,7 +50,9 @@ main() {
 
     generate_files
 
-    echo "Build preparation completed successfully."
+    build_packages
+
+    echo "Build completed successfully."
 
 }
 
