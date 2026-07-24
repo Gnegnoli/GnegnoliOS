@@ -2,15 +2,14 @@
 
 build_package() {
 
-    local package_name="$1"
-    local package_dir="$PROJECT_ROOT/packages/$package_name"
+    local package_dir="$1"
+    local package_name
 
-    if [ ! -d "$package_dir" ]; then
-        echo "ERROR: Package '$package_name' not found."
-        exit 1
-    fi
+    package_name=$(basename "$package_dir")
 
+    echo "-----------------------------------------"
     echo "Building package: $package_name"
+    echo "-----------------------------------------"
 
     (
         cd "$package_dir"
@@ -20,12 +19,37 @@ build_package() {
         makepkg -f --noconfirm
     )
 
-    echo "Package '$package_name' built successfully."
     echo
 }
 
 build_packages() {
 
-    build_package "gnegnolios-release"
+    echo "Searching for packages..."
+    echo
+
+    for package_dir in "$PROJECT_ROOT"/packages/*; do
+
+        [ -d "$package_dir" ] || continue
+
+        if [ ! -f "$package_dir/package.yaml" ]; then
+            echo "Skipping $(basename "$package_dir"): package.yaml not found."
+            continue
+        fi
+
+        if [ ! -f "$package_dir/PKGBUILD" ]; then
+            echo "Skipping $(basename "$package_dir"): PKGBUILD not found."
+            continue
+        fi
+
+        enabled=$(yq '.enabled' "$package_dir/package.yaml")
+
+        if [ "$enabled" != "true" ]; then
+            echo "Skipping $(basename "$package_dir"): disabled."
+            continue
+        fi
+
+        build_package "$package_dir"
+
+    done
 
 }
