@@ -25,32 +25,32 @@
 
 <br/>
 
-## Cos'è
+## What it is
 
-**GnegnoliOS** è una distribuzione Linux basata su **Arch Linux** pensata per sentirsi come un prodotto costruito da una grande azienda: solida, affidabile, restrained, visivamente inconfondibile — dal primo boot.
+**GnegnoliOS** is a Linux distribution based on **Arch Linux**, built to feel like a product from a serious technology company: solid, trustworthy, restrained, visually unmistakable — from the very first boot.
 
-Non è un remaster con un wallpaper diverso. È un sistema con **identità propria, default curati, e un'esperienza prodotto deliberata**, dal boot splash all'installer, dal tema del terminale all'ISO stessa.
+This isn't a remaster with a different wallpaper. It's a system with **its own identity, curated defaults, and a deliberate product experience** — from the boot splash to the installer, from the terminal theme to the ISO itself.
 
-> "Il logo porta il brand. GnegnoliOS non ha bisogno di una mascotte."
+> "The logo carries the brand. GnegnoliOS does not need a mascot."
 
-## Obiettivi
+## Goals
 
-- **Zero frizione dal primo boot.** Driver, firmware, codec, snapshot, power management: funzionano out of the box.
-- **Un solo installer intelligente.** Non un elenco infinito di checkbox: profili curati (Express / Guided / Advanced) che coprono developer, gamer, creator, sysadmin, enterprise.
-- **Single source of truth.** Ogni componente deriva la sua configurazione da [`config/distro.yaml`](config/distro.yaml) — niente duplicazione, automazione ovunque possibile.
-- **Un'identità visiva coerente su ogni superficie**: logo, GRUB, Plymouth, SDDM, Plasma, cursori, terminale, Firefox, Calamares, sito, documentazione.
-- **Costruito per chi lavora davvero sulla macchina**: developer, sysadmin, musicisti, creator, streamer, video editor, power user, aziende.
+- **Zero friction from first boot.** Drivers, firmware, codecs, snapshots, power management: work out of the box.
+- **One smart installer.** Not an endless checklist — curated modes (Express / Guided / Advanced) covering developers, gamers, creators, sysadmins, enterprise users.
+- **Single source of truth.** Every component derives its configuration from [`config/distro.yaml`](config/distro.yaml) — no duplication, automation wherever possible.
+- **One consistent visual identity across every surface**: logo, GRUB, Plymouth, SDDM, Plasma, cursors, terminal, Firefox, Calamares, website, documentation.
+- **Built for people who actually work on the machine**: developers, sysadmins, musicians, creators, streamers, video editors, power users, businesses.
 
-## Chi lo usa
+## Who it's for
 
 | | | | |
 |---|---|---|---|
-| 👨‍💻 Developer | 🛠️ Power user | 🖥️ SysAdmin | 🎚️ Musicisti |
-| 🎬 Content creator | 📡 Streamer | ✂️ Video editor | 🏢 Enterprise |
+| 👨‍💻 Developers | 🛠️ Power users | 🖥️ SysAdmins | 🎚️ Musicians |
+| 🎬 Content creators | 📡 Streamers | ✂️ Video editors | 🏢 Enterprise |
 
-## Stack tecnico
+## Technical baseline
 
-| Componente | Scelta |
+| Component | Choice |
 |---|---|
 | Base | Arch Linux |
 | Package manager | `pacman` + `yay` (AUR) |
@@ -65,7 +65,7 @@ Non è un remaster con un wallpaper diverso. È un sistema con **identità propr
 | Installer | Calamares + Smart Installer Catalog |
 | Sandboxing | Flatpak |
 
-## Identità visiva
+## Visual identity
 
 <div align="center">
 <img src="packages/gnegnolios-branding/rootfs/usr/share/gnegnolios/sddm/login.png" width="49%" alt="SDDM login theme" />
@@ -74,46 +74,46 @@ Non è un remaster con un wallpaper diverso. È un sistema con **identità propr
 <sub>Login screen (SDDM) — Boot splash (Plymouth)</sub>
 </div>
 
-Il linguaggio visivo combina minimalismo corporate, geometria gotico-architettonica, acciaio forgiato, pietra vulcanica, marmo nero — atmosfera dark fantasy *restrained*, mai horror, mai neon, mai cyberpunk.
+The visual language blends corporate minimalism, gothic architectural geometry, forged steel, volcanic stone, black marble — a restrained dark-fantasy atmosphere, never horror, never neon, never cyberpunk.
 
 **Palette**
 
-| Token | | Hex | Uso |
+| Token | | Hex | Use |
 |---|---|---|---|
-| Matte Black | ![#0D0D0D](https://placehold.co/16x16/0D0D0D/0D0D0D.png) | `#0D0D0D` | Background primario |
-| Charcoal | ![#1B1B1B](https://placehold.co/16x16/1B1B1B/1B1B1B.png) | `#1B1B1B` | Superfici rialzate |
-| Steel | ![#323232](https://placehold.co/16x16/323232/323232.png) | `#323232` | Divisori |
-| Graphite | ![#4D4D4D](https://placehold.co/16x16/4D4D4D/4D4D4D.png) | `#4D4D4D` | Controlli muti |
-| Dark Crimson | ![#7A0F16](https://placehold.co/16x16/7A0F16/7A0F16.png) | `#7A0F16` | Accento, focus, progress |
-| Metal Silver | ![#A8A8A8](https://placehold.co/16x16/A8A8A8/A8A8A8.png) | `#A8A8A8` | Testo secondario |
-| White | ![#EDEDED](https://placehold.co/16x16/EDEDED/EDEDED.png) | `#EDEDED` | Testo primario |
+| Matte Black | ![#0D0D0D](https://placehold.co/16x16/0D0D0D/0D0D0D.png) | `#0D0D0D` | Primary background |
+| Charcoal | ![#1B1B1B](https://placehold.co/16x16/1B1B1B/1B1B1B.png) | `#1B1B1B` | Raised surfaces |
+| Steel | ![#323232](https://placehold.co/16x16/323232/323232.png) | `#323232` | Dividers |
+| Graphite | ![#4D4D4D](https://placehold.co/16x16/4D4D4D/4D4D4D.png) | `#4D4D4D` | Muted controls |
+| Dark Crimson | ![#7A0F16](https://placehold.co/16x16/7A0F16/7A0F16.png) | `#7A0F16` | Accent, focus, progress |
+| Metal Silver | ![#A8A8A8](https://placehold.co/16x16/A8A8A8/A8A8A8.png) | `#A8A8A8` | Secondary text |
+| White | ![#EDEDED](https://placehold.co/16x16/EDEDED/EDEDED.png) | `#EDEDED` | Primary text |
 
-Dettagli completi in [`docs/BRAND_SYSTEM.md`](docs/BRAND_SYSTEM.md).
+Full details in [`docs/BRAND_SYSTEM.md`](docs/BRAND_SYSTEM.md).
 
-## Struttura del repo
+## Repository layout
 
 ```
 GnegnoliOS/
-├── config/          # distro.yaml — single source of truth, installer.yaml — catalogo Smart Installer
-├── distro/          # profilo archiso, tutto ciò che serve per generare la ISO
-├── packages/        # pacchetti custom (branding, calamares-config, installer-config, release...)
-├── profiles/        # pacchetti per desktop / kernel / feature, combinati a build-time
-├── calamares/        # configurazione installer
-├── scripts/         # motore di build (scripts/lib/*.sh)
-└── docs/            # architettura, brand system, product brief, smart installer
+├── config/          # distro.yaml — single source of truth, installer.yaml — Smart Installer catalog
+├── distro/          # archiso profile, everything needed to generate the ISO
+├── packages/        # custom packages (branding, calamares-config, installer-config, release...)
+├── profiles/        # desktop / kernel / feature package sets, combined at build time
+├── calamares/        # installer configuration
+├── scripts/         # build engine (scripts/lib/*.sh)
+└── docs/            # architecture, brand system, product brief, smart installer
 ```
 
-Architettura completa in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+Full architecture in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ## Smart Installer
 
-Calamares guidato da un catalogo dichiarativo ([`config/installer.yaml`](config/installer.yaml)) con tre modalità:
+Calamares driven by a declarative catalog ([`config/installer.yaml`](config/installer.yaml)) with three modes:
 
-- **Express** — sistema pronto all'uso, zero domande.
-- **Guided** *(consigliata)* — profili smart per categoria (browser, dev, gaming, virtualizzazione, driver...).
-- **Advanced** — controllo granulare su filesystem, kernel, bootloader, servizi, pacchetti.
+- **Express** — ready-to-use system, no questions asked.
+- **Guided** *(recommended)* — smart per-category profiles (browsers, dev, gaming, virtualization, drivers...).
+- **Advanced** — granular control over filesystem, kernel, bootloader, services, packages.
 
-Dettagli in [`docs/SMART_INSTALLER.md`](docs/SMART_INSTALLER.md).
+Details in [`docs/SMART_INSTALLER.md`](docs/SMART_INSTALLER.md).
 
 ## Build
 
@@ -121,19 +121,19 @@ Dettagli in [`docs/SMART_INSTALLER.md`](docs/SMART_INSTALLER.md).
 ./scripts/build.sh
 ```
 
-La build:
-1. carica `config/distro.yaml` e valida la configurazione;
-2. compone la lista pacchetti da `profiles/base.yaml` + desktop + kernel + feature profile selezionati;
-3. compila i pacchetti custom di `packages/` e li pubblica in un repo pacman locale;
-4. genera l'ISO via `mkarchiso`.
+The build:
+1. loads `config/distro.yaml` and validates the configuration;
+2. composes the package list from `profiles/base.yaml` + selected desktop, kernel, and feature profiles;
+3. compiles the custom packages in `packages/` and publishes them to a local pacman repository;
+4. generates the ISO via `mkarchiso`.
 
-Output in `build/output/gnegnolios-*.iso`.
+Output lands in `build/output/gnegnolios-*.iso`.
 
-## Stato del progetto
+## Project status
 
-`v0.1-alpha` — in sviluppo attivo. Struttura, branding e build engine consolidati; installer e profili in espansione continua.
+`v0.1-alpha` — active development. Structure, branding, and build engine are stable; installer and profiles are still expanding.
 
 <div align="center">
 <br/>
-<sub>GnegnoliOS — costruito per essere usato sul serio.</sub>
+<sub>GnegnoliOS — built to actually be used.</sub>
 </div>
