@@ -1,0 +1,263 @@
+#!/usr/bin/env python3
+
+import argparse
+import json
+from pathlib import Path
+import sys
+
+import yaml
+
+
+DEFAULT_CATALOG = Path("/usr/share/gnegnolios/installer/catalog.yaml")
+
+CHOICE_ALIASES = {
+    "browser": "browsers",
+    "office_suite": "office_suites",
+    "kernel": "kernels",
+    "filesystem": "filesystems",
+    "snapshot": "snapshots",
+    "theme": "themes",
+    "terminal": "terminals",
+    "editor": "editors",
+    "shell": "shells",
+    "driver": "drivers",
+}
+
+PACKAGE_SOURCES = (
+    "pacman",
+    "aur",
+    "flatpak",
+    "manual",
+)
+
+
+def load_catalog(path):
+    with path.open("r", encoding="utf-8") as handle:
+        return yaml.safe_load(handle)
+
+
+def normalize_category(category):
+    return CHOICE_ALIASES.get(category, category)
+
+
+def add_values(result, source, values):
+    if not values:
+        return
+
+    bucket = result.setdefault(source, [])
+
+    for value in values:
+        if value not in bucket:
+            bucket.append(value)
+
+
+def merge_package_map(result, package_map, hardware):
+    if not package_map:
+        return
+
+    for source in PACKAGE_SOURCES:
+        add_values(result, source, package_map.get(source, []))
+
+    optional = package_map.get("hardware_optional", {})
+    for hardware_id in hardware:
+        add_values(result, "pacman", optional.get(hardware_id, []))
+
+
+def resolve_group_option(catalog, category, option, result, hardware, seen=None):
+    seen = seen or set()
+    category = normalize_category(category)
+    key = (category, option)
+
+    if key in seen:
+        return
+
+    seen.add(key)
+
+    groups = catalog.get("package_groups", {})
+    if category not in groups:
+        raise KeyError(f"Unknown package group: {category}")
+
+    options = groups[category]
+    if option not in options:
+        raise KeyError(f"Unknown option '{option}' in package group '{category}'")
+
+    definition = options[option]
+
+    for included in definition.get("includes", []):
+        resolve_group_option(catalog, category, included, result, hardware, seen)
+
+    merge_package_map(result, definition.get("packages", {}), hardware)
+
+
+def resolve_profile(catalog, profile, result, hardware):
+    profiles = catalog.get("profiles", {})
+
+    if profile not in profiles:
+        raise KeyError(f"Unknown profile: {profile}")
+
+    merge_package_map(result, profiles[profile].get("packages", {}), hardware)
+
+
+def parse_choice(value):
+    if "=" not in value:
+        raise argparse.ArgumentTypeError("choices must use CATEGORY=OPTION")
+
+    category, option = value.split("=", 1)
+    category = normalize_category(category.strip())
+    option = option.strip()
+
+    if not category or not option:
+        raise argparse.ArgumentTypeError("choices must use CATEGORY=OPTION")
+
+    return category, option
+
+
+def collect_default_choices(catalog):
+    defaults = catalog.get("defaults", {})
+    choices = []
+
+    for category, option in defaults.items():
+        if category == "mode":
+            continue
+        choices.append((normalize_category(category), option))
+
+    return choices
+
+
+def collect_mode_definition(catalog, mode):
+    for definition in catalog.get("modes", []):
+        if definition.get("id") == mode:
+            return definition
+
+    raise KeyError(f"Unknown installer mode: {mode}")
+
+
+def resolve_selection(catalog, mode, profiles, choices, hardware, include_defaults):
+    result = {
+        "pacman": [],
+        "aur": [],
+        "flatpak": [],
+        "manual": [],
+    }
+    resolved_profiles = []
+    resolved_choices = []
+    mode_definition = collect_mode_definition(catalog, mode)
+
+    if mode == "express":
+        for profile in mode_definition.get("include_profiles", []):
+            resolve_profile(catalog, profile, result, hardware)
+            resolved_profiles.append(profile)
+
+        for category, option in mode_definition.get("fixed_choices", {}).items():
+            category = normalize_category(category)
+            resolve_group_option(catalog, category, option, result, hardware)
+            resolved_choices.append({"category": category, "option": option})
+
+    else:
+        if include_defaults:
+            explicit_categories = {category for category, _option in choices}
+
+            for category, option in collect_default_choices(catalog):
+                if category in explicit_categories:
+                    continue
+
+                resolve_group_option(catalog, category, option, result, hardware)
+                resolved_choices.append({"category": category, "option": option})
+
+        for profile in profiles:
+            resolve_profile(catalog, profile, result, hardware)
+            resolved_profiles.append(profile)
+
+        for category, option in choices:
+            resolve_group_option(catalog, category, option, result, hardware)
+            resolved_choices.append({"category": category, "option": option})
+
+    for source in result:
+        result[source] = sorted(result[source])
+
+    return {
+        "mode": mode,
+        "profiles": sorted(set(resolved_profiles)),
+        "choices": resolved_choices,
+        "hardware": sorted(set(hardware)),
+        "packages": result,
+        "counts": {source: len(packages) for source, packages in result.items()},
+    }
+
+
+def render_summary(selection):
+    lines = [
+        f"Mode: {selection['mode']}",
+        f"Profiles: {', '.join(selection['profiles']) or 'none'}",
+        f"Hardware: {', '.join(selection['hardware']) or 'none'}",
+        "",
+    ]
+
+    for source, packages in selection["packages"].items():
+        lines.append(f"{source}: {len(packages)}")
+        for package in packages:
+            lines.append(f"  - {package}")
+        lines.append("")
+
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(
+        description="Resolve GnegnoliOS Smart Installer selections into package lists."
+    )
+    parser.add_argument(
+        "--catalog",
+        type=Path,
+        default=DEFAULT_CATALOG,
+        help=f"catalog path, default: {DEFAULT_CATALOG}",
+    )
+    parser.add_argument("--mode", choices=("express", "guided", "advanced"), default="guided")
+    parser.add_argument("--profile", action="append", default=[], help="usage profile id")
+    parser.add_argument(
+        "--choice",
+        action="append",
+        default=[],
+        type=parse_choice,
+        help="package group choice, e.g. browsers=firefox",
+    )
+    parser.add_argument(
+        "--hardware",
+        action="append",
+        default=[],
+        choices=("nvidia", "amd", "intel"),
+        help="hardware profile for optional packages",
+    )
+    parser.add_argument(
+        "--no-defaults",
+        action="store_true",
+        help="do not apply default choices in guided or advanced mode",
+    )
+    parser.add_argument("--format", choices=("json", "summary"), default="json")
+
+    args = parser.parse_args(argv)
+
+    try:
+        catalog = load_catalog(args.catalog)
+        selection = resolve_selection(
+            catalog=catalog,
+            mode=args.mode,
+            profiles=args.profile,
+            choices=args.choice,
+            hardware=args.hardware,
+            include_defaults=not args.no_defaults,
+        )
+    except (OSError, KeyError, yaml.YAMLError) as error:
+        print(f"gnegnolios-installer-resolve: {error}", file=sys.stderr)
+        return 1
+
+    if args.format == "summary":
+        print(render_summary(selection), end="")
+    else:
+        print(json.dumps(selection, indent=2, sort_keys=True))
+
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

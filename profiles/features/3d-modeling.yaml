@@ -1,0 +1,5 @@
+id: 3d-modeling
+
+packages:
+  - blender
+  - freecad

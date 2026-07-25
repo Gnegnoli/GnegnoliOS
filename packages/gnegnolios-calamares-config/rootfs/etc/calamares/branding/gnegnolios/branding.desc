@@ -1,0 +1,39 @@
+# ==========================================================
+# GnegnoliOS Calamares Branding
+# ==========================================================
+
+---
+componentName: gnegnolios
+welcomeStyleCalamares: false
+welcomeExpandingLogo: true
+
+windowExpanding: normal
+windowSize: 1000px,680px
+windowPlacement: center
+
+sidebar: widget
+navigation: widget
+
+strings:
+  productName: GnegnoliOS
+  shortProductName: GnegnoliOS
+  version: "0.1-alpha"
+  shortVersion: "0.1"
+  versionedName: GnegnoliOS 0.1-alpha Genesis
+  shortVersionedName: GnegnoliOS Genesis
+  bootloaderEntryName: GnegnoliOS
+  productUrl: https://gnegnolios.org
+  supportUrl: https://github.com/GnegnoliOS
+  knownIssuesUrl: https://github.com/GnegnoliOS
+  releaseNotesUrl: https://github.com/GnegnoliOS
+
+images:
+  productIcon: gnegnolios-mark.png
+  productLogo: gnegnolios-mark.png
+  productWelcome: gnegnolios-mark.png
+
+style:
+  sidebarBackground: "#0D0D0D"
+  sidebarText: "#A8A8A8"
+  sidebarTextSelect: "#EDEDED"
+  sidebarTextHighlight: "#7A0F16"

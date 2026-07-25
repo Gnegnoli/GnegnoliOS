@@ -1,0 +1,7 @@
+id: security-privacy
+
+packages:
+  - ufw
+  - fail2ban
+  - firejail
+  - apparmor

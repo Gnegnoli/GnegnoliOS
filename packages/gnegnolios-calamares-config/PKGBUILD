@@ -1,0 +1,21 @@
+pkgname=gnegnolios-calamares-config
+pkgver=0.1
+pkgrel=1
+pkgdesc="Calamares configuration for GnegnoliOS"
+arch=('any')
+license=('custom')
+optdepends=(
+    'calamares: graphical installer runtime'
+    'gnegnolios-branding: shared GnegnoliOS artwork'
+    'gnegnolios-installer-config: Smart Installer catalog and resolver'
+)
+
+source=()
+
+sha256sums=()
+
+package() {
+
+    cp -a "$startdir/rootfs/." "$pkgdir"
+
+}

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Install GnegnoliOS
+GenericName=System Installer
+Comment=Install GnegnoliOS to this computer
+Exec=gnegnolios-install
+Icon=gnegnolios-installer
+Terminal=false
+Categories=System;
+StartupNotify=true

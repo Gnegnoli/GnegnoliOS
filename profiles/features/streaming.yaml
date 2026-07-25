@@ -1,0 +1,7 @@
+id: streaming
+
+packages:
+  - obs-studio
+  - ffmpeg
+  - handbrake
+  - discord

@@ -1,0 +1,9 @@
+id: multimedia
+
+packages:
+  - vlc
+  - mpv
+  - celluloid
+  - ffmpeg
+  - handbrake
+  - gimp

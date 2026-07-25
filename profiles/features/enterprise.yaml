@@ -1,0 +1,13 @@
+id: enterprise
+
+packages:
+  - apparmor
+  - fail2ban
+  - openvpn
+  - wireguard-tools
+  - tailscale
+  - samba
+  - cups
+  - openssh
+  - syncthing
+  - snapper

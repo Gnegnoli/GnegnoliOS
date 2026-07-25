@@ -9,11 +9,11 @@ load_configuration() {
         exit 1
     fi
 
-    DISTRO_NAME=$(yq '.name' "$CONFIG_FILE")
-    DISTRO_VERSION=$(yq '.version' "$CONFIG_FILE")
+    DISTRO_NAME=$(yq -r '.name' "$CONFIG_FILE")
+    DISTRO_VERSION=$(yq -r '.version' "$CONFIG_FILE")
 
-    DISTRO_KERNEL=$(yq '.kernel.default' "$CONFIG_FILE")
-    DISTRO_DESKTOP=$(yq '.desktop.default' "$CONFIG_FILE")
+    DISTRO_KERNEL=$(yq -r '.kernel.default' "$CONFIG_FILE")
+    DISTRO_DESKTOP=$(yq -r '.desktop.default' "$CONFIG_FILE")
 }
 
 validate_value() {

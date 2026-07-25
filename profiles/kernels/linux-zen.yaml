@@ -1,0 +1,5 @@
+id: linux-zen
+
+packages:
+  - linux-zen
+  - linux-zen-headers

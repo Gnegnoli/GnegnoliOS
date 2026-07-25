@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="GnegnoliOS installer">
+  <rect width="128" height="128" rx="8" fill="#0D0D0D"/>
+  <path fill="#0D0D0D" stroke="#A8A8A8" stroke-width="6" stroke-linejoin="round" d="M64 13 100 29v27c0 24-14 43-36 53-22-10-36-29-36-53V29L64 13Z"/>
+  <path fill="#1B1B1B" stroke="#4D4D4D" stroke-width="3" stroke-linejoin="round" d="M44 85V72c0-19 8-32 20-39 12 7 20 20 20 39v13H74V72c0-10-4-18-10-23-6 5-10 13-10 23v13H44Z"/>
+  <path fill="#7A0F16" d="M60 51h8v34h-8z"/>
+  <path fill="#EDEDED" d="M42 106h44v8H42z"/>
+</svg>

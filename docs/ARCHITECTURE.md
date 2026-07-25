@@ -79,6 +79,8 @@ Contains:
 - Branding
 - Installer configuration
 
+The Smart Installer must read `config/installer.yaml` through the installed `gnegnolios-installer-config` package instead of duplicating profile data in Calamares module files.
+
 ---
 
 ## config/
@@ -92,6 +94,14 @@ distro.yaml
 ```
 
 This is the main configuration file of the project.
+
+Additional catalog:
+
+```
+installer.yaml
+```
+
+This file describes Smart Installer modes, profile categories, package groups, and package sources.
 
 ---
 
@@ -115,6 +125,10 @@ Examples:
 - gnegnolios-release
 - gnegnolios-defaults
 - gnegnolios-branding
+- gnegnolios-installer-config
+- gnegnolios-calamares-config
+
+Packages with `enabled: true` and `install.iso: true` in `package.yaml` are added to the generated ArchISO package list. During the build, package artifacts are published to a generated local pacman repository and the workspace `pacman.conf` is extended with that repository.
 
 ---
 

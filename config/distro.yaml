@@ -13,6 +13,52 @@ base:
 branding:
   name: GnegnoliOS
   codename: Genesis
+  slogan: Power. Elegance. Darkness. Precision.
+  identity:
+    positioning: premium enterprise Arch Linux distribution
+    tone:
+      - precise
+      - powerful
+      - elegant
+      - reliable
+      - exclusive
+  palette:
+    matte_black: "#0D0D0D"
+    charcoal: "#1B1B1B"
+    steel: "#323232"
+    graphite: "#4D4D4D"
+    dark_crimson: "#7A0F16"
+    metal_silver: "#A8A8A8"
+    white: "#EDEDED"
+  typography:
+    display:
+      - Cinzel
+      - Cormorant Garamond
+    body:
+      - Inter
+      - IBM Plex Sans
+    monospace:
+      - JetBrains Mono
+  materials:
+    - brushed steel
+    - forged iron
+    - volcanic stone
+    - black marble
+    - obsidian
+    - leather
+    - dark wood
+    - oxidized metal
+  avoid:
+    - horror
+    - satanic imagery
+    - skulls
+    - demons
+    - monsters
+    - neon colors
+    - cyberpunk cliches
+    - anime
+    - cartoons
+    - RGB gaming aesthetics
 
 kernel:
   default: linux
@@ -39,13 +85,35 @@ package_manager:
   default: pacman
 
 additional_package_managers:
-  - paru
+  - yay
   - flatpak
+
+system:
+  display_server: wayland
+  display_manager: sddm
+  bootloader: grub
+  init: systemd
+  filesystem: btrfs
+  snapshots: snapper
+  firewall: ufw
+  audio: pipewire
 
 repositories:
   - gnegnolios-core
 
 profiles:
+  - home
   - gaming
   - development
   - office
+  - multimedia
+  - security-privacy
+
+installer:
+  framework: calamares
+  catalog: config/installer.yaml
+  default_mode: guided
+  modes:
+    - express
+    - guided
+    - advanced

@@ -1,0 +1,6 @@
+id: graphic-design
+
+packages:
+  - gimp
+  - krita
+  - inkscape

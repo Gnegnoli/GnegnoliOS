@@ -1,0 +1,5 @@
+id: linux-hardened
+
+packages:
+  - linux-hardened
+  - linux-hardened-headers

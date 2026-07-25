@@ -1,0 +1,9 @@
+id: video-editing
+
+packages:
+  - kdenlive
+  - shotcut
+  - obs-studio
+  - ffmpeg
+  - handbrake
+  - blender

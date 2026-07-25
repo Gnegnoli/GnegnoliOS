@@ -1,0 +1,13 @@
+{
+  "KPlugin": {
+    "Id": "GnegnoliOSGenesis",
+    "Name": "GnegnoliOS Genesis",
+    "Description": "Dark architectural wallpaper for the GnegnoliOS Genesis visual system.",
+    "Authors": [
+      {
+        "Name": "GnegnoliOS"
+      }
+    ],
+    "License": "CC-BY-SA-4.0"
+  }
+}

@@ -1,0 +1,981 @@
+# ==========================================================
+# GnegnoliOS Smart Installer Catalog
+# ==========================================================
+
+version: 1
+
+philosophy:
+  statement: Install only what you need. Everything works. Nothing is missing.
+  goals:
+    - Keep Express mode simple enough for first-time Linux users.
+    - Make Guided mode the recommended path for most users.
+    - Give Advanced users granular control without hiding power.
+    - Avoid installing unused heavy software unless the user asks for it.
+
+runtime:
+  framework: calamares
+  strategy: custom catalog consumed by Calamares pages or custom modules
+  package_manager: pacman
+  aur_helper: yay
+  flatpak: enabled
+  notes:
+    - Calamares itself must be supplied by a custom repository or AUR bootstrap package.
+    - AUR, Flatpak, and manual installers are intentionally separated from pacman packages.
+    - Steam and Wine require the multilib repository.
+
+defaults:
+  mode: guided
+  browser: firefox
+  office_suite: libreoffice
+  kernel: linux
+  filesystem: btrfs
+  snapshots: snapper
+  shell: bash
+  terminal: konsole
+  editor: kate
+  theme: gnegnolios-dark
+  driver: auto-detect
+
+modes:
+  - id: express
+    name: Express Installation
+    description: Installs a complete ready-to-use KDE system with no optional questions.
+    include_profiles:
+      - home
+      - office
+      - multimedia
+      - gaming
+      - security-privacy
+    fixed_choices:
+      browser: firefox
+      office_suite: libreoffice
+      kernel: linux
+      filesystem: btrfs
+      snapshots: snapper
+      shell: bash
+      terminal: konsole
+      editor: kate
+      theme: gnegnolios-dark
+      driver: auto-detect
+
+  - id: guided
+    name: Guided Installation
+    description: Recommended mode with smart profiles and expandable package categories.
+    categories:
+      - usage_profiles
+      - browsers
+      - office_suites
+      - multimedia
+      - development_languages
+      - containers
+      - virtualization
+      - drivers
+      - kernels
+      - filesystems
+      - snapshots
+      - shells
+      - terminals
+      - editors
+      - themes
+      - optional_services
+      - privacy
+      - extra_tools
+
+  - id: advanced
+    name: Advanced Installation
+    description: Full control over filesystem, kernels, bootloader, services, profiles, and packages.
+    unlocks:
+      - multi_kernel_install
+      - bootloader_selection
+      - service_selection
+      - filesystem_selection
+      - package_source_selection
+      - post_install_hooks
+
+ui:
+  pattern: expandable-category-cards
+  summary_required: true
+  beginner_path: one-click profiles
+  advanced_path: per-package overrides
+  category_card_fields:
+    - name
+    - description
+    - package_count
+    - recommended
+    - source_mix
+
+categories:
+  - id: usage_profiles
+    name: PC Usage
+    selection: multiple
+    options:
+      - home
+      - office
+      - gaming
+      - streaming
+      - development
+      - music-production
+      - graphic-design
+      - video-editing
+      - photography
+      - 3d-modeling
+      - cad
+      - cybersecurity
+      - virtualization
+      - server
+      - ai-machine-learning
+
+  - id: browsers
+    name: Browser
+    selection: single
+    options:
+      - firefox
+      - brave
+      - chromium
+      - vivaldi
+      - none
+
+  - id: office_suites
+    name: Office Suite
+    selection: single
+    options:
+      - libreoffice
+      - onlyoffice
+      - both
+      - none
+
+  - id: multimedia
+    name: Multimedia
+    selection: multiple
+    options:
+      - vlc
+      - mpv
+      - celluloid
+      - spotify
+      - jellyfin
+      - kodi
+
+  - id: development_languages
+    name: Development Languages
+    selection: multiple
+    options:
+      - python
+      - node
+      - java
+      - go
+      - rust
+      - php
+      - csharp
+      - cpp
+      - ruby
+
+  - id: containers
+    name: Containers
+    selection: multiple
+    options:
+      - docker
+      - podman
+      - distrobox
+      - toolbox
+
+  - id: virtualization
+    name: Virtualization
+    selection: multiple
+    options:
+      - qemu-kvm
+      - virtualbox
+      - vmware-tools
+
+  - id: drivers
+    name: Drivers
+    selection: single
+    options:
+      - auto-detect
+      - nvidia-proprietary
+      - nvidia-open
+      - amd
+      - intel
+
+  - id: kernels
+    name: Kernel
+    selection: multiple
+    options:
+      - linux
+      - linux-lts
+      - linux-zen
+      - linux-hardened
+
+  - id: filesystems
+    name: Filesystem
+    selection: single
+    options:
+      - btrfs
+      - ext4
+      - xfs
+
+  - id: snapshots
+    name: Snapshots
+    selection: multiple
+    options:
+      - snapper
+      - timeshift
+
+  - id: shells
+    name: Shell
+    selection: single
+    options:
+      - bash
+      - zsh
+      - fish
+
+  - id: terminals
+    name: Terminal
+    selection: single
+    options:
+      - konsole
+      - kitty
+      - alacritty
+      - ghostty
+
+  - id: editors
+    name: Editor
+    selection: single
+    options:
+      - kate
+      - code
+      - neovim
+      - emacs
+
+  - id: themes
+    name: Theme
+    selection: single
+    options:
+      - gnegnolios-dark
+      - gnegnolios-crimson
+      - gnegnolios-steel
+
+  - id: optional_services
+    name: Optional Services
+    selection: multiple
+    options:
+      - bluetooth
+      - cups
+      - avahi
+      - samba
+      - openssh
+      - tailscale
+      - syncthing
+      - kde-connect
+
+  - id: privacy
+    name: Privacy And Security
+    selection: multiple
+    options:
+      - ufw
+      - fail2ban
+      - dns-over-https
+      - flatpak-sandbox
+      - firejail
+      - apparmor
+
+  - id: extra_tools
+    name: Extra Tools
+    selection: multiple
+    options:
+      - gparted
+      - bleachbit
+      - filezilla
+      - krita
+      - inkscape
+      - obs
+      - steam
+      - bottles
+      - heroic
+
+profiles:
+  home:
+    name: Home
+    description: Daily desktop use with browser, file tools, screenshots, power management, and archive tools.
+    packages:
+      pacman:
+        - firefox
+        - dolphin
+        - ark
+        - spectacle
+        - partitionmanager
+        - power-profiles-daemon
+
+  office:
+    name: Office
+    description: Documents, PDF, printing, dictionaries, and scanning-ready foundations.
+    packages:
+      pacman:
+        - libreoffice-fresh
+        - okular
+        - hunspell
+        - hunspell-en_us
+        - cups
+        - system-config-printer
+      aur:
+        - onlyoffice-bin
+
+  gaming:
+    name: Gaming
+    description: Steam, Wine, launchers, overlays, and capture tools.
+    packages:
+      pacman:
+        - steam
+        - lutris
+        - wine
+        - winetricks
+        - gamemode
+        - mangohud
+        - obs-studio
+        - discord
+      flatpak:
+        - com.heroicgameslauncher.hgl
+        - com.usebottles.bottles
+      aur:
+        - proton-ge-custom-bin
+
+  streaming:
+    name: Streaming
+    description: Recording, live streaming, chat, encoding, and media conversion.
+    packages:
+      pacman:
+        - obs-studio
+        - ffmpeg
+        - handbrake
+        - discord
+
+  development:
+    name: Development
+    description: IDEs, languages, containers, version control, and database clients.
+    packages:
+      pacman:
+        - base-devel
+        - git
+        - github-cli
+        - code
+        - neovim
+        - docker
+        - docker-compose
+        - podman
+        - distrobox
+        - nodejs
+        - npm
+        - python
+        - python-pip
+        - jdk-openjdk
+        - rust
+        - go
+        - php
+        - composer
+        - mariadb-clients
+        - postgresql-libs
+
+  containers:
+    name: Containers
+    description: Docker, Podman, Distrobox, and Toolbox for development and isolated workloads.
+    packages:
+      pacman:
+        - docker
+        - docker-compose
+        - podman
+        - distrobox
+        - toolbox
+
+  music-production:
+    name: Music Production
+    description: DAW, patchbay, JACK compatibility, audio effects, and plugin hosts.
+    packages:
+      pacman:
+        - ardour
+        - audacity
+        - carla
+        - helvum
+        - easyeffects
+        - qjackctl
+        - pipewire-jack
+        - lsp-plugins
+        - calf
+      aur:
+        - reaper-bin
+
+  graphic-design:
+    name: Graphic Design
+    description: Raster, vector, and painting tools.
+    packages:
+      pacman:
+        - gimp
+        - krita
+        - inkscape
+
+  video-editing:
+    name: Video Editing
+    description: Non-linear editors, encoding, screen capture, and 3D motion work.
+    packages:
+      pacman:
+        - kdenlive
+        - shotcut
+        - obs-studio
+        - ffmpeg
+        - handbrake
+        - blender
+      manual:
+        - davinci-resolve
+
+  photography:
+    name: Photography
+    description: RAW processing, image management, and retouching.
+    packages:
+      pacman:
+        - darktable
+        - rawtherapee
+        - digikam
+        - gimp
+
+  3d-modeling:
+    name: 3D Modeling
+    description: Blender and CAD-adjacent modeling tools.
+    packages:
+      pacman:
+        - blender
+        - freecad
+
+  cad:
+    name: CAD
+    description: 2D and parametric CAD tools.
+    packages:
+      pacman:
+        - freecad
+        - librecad
+
+  cybersecurity:
+    name: Cybersecurity
+    description: Network inspection, packet capture, VPN, and firewall tools.
+    packages:
+      pacman:
+        - nmap
+        - wireshark-qt
+        - tcpdump
+        - openvpn
+        - wireguard-tools
+
+  virtualization:
+    name: Virtualization
+    description: QEMU/KVM, libvirt UI, firmware, and network support.
+    packages:
+      pacman:
+        - qemu-full
+        - virt-manager
+        - dnsmasq
+        - edk2-ovmf
+
+  server:
+    name: Server
+    description: SSH, web, database, cache, firewall, and intrusion prevention basics.
+    packages:
+      pacman:
+        - openssh
+        - nginx
+        - mariadb
+        - postgresql
+        - valkey
+        - fail2ban
+        - ufw
+
+  ai-machine-learning:
+    name: AI And Machine Learning
+    description: Python notebooks, local models, and ML frameworks.
+    packages:
+      pacman:
+        - python
+        - python-pip
+        - jupyter-notebook
+        - python-pytorch
+        - python-tensorflow
+        - ollama
+      hardware_optional:
+        nvidia:
+          - cuda
+        amd:
+          - rocm-hip-sdk
+
+  multimedia:
+    name: Multimedia
+    description: Players, codecs, conversion, and light creative tooling.
+    packages:
+      pacman:
+        - vlc
+        - mpv
+        - celluloid
+        - ffmpeg
+        - handbrake
+        - gimp
+
+  security-privacy:
+    name: Security And Privacy
+    description: Firewall, sandboxing, application confinement, and intrusion prevention.
+    packages:
+      pacman:
+        - ufw
+        - fail2ban
+        - firejail
+        - apparmor
+
+composed_profiles:
+  creator-edition:
+    name: Creator Edition
+    includes:
+      - music-production
+      - video-editing
+      - graphic-design
+      - photography
+      - streaming
+
+  developer-edition:
+    name: Developer Edition
+    includes:
+      - development
+      - containers
+      - virtualization
+
+  gamer-edition:
+    name: Gamer Edition
+    includes:
+      - gaming
+      - streaming
+
+  enterprise-edition:
+    name: Enterprise Edition
+    includes:
+      - office
+      - security-privacy
+      - virtualization
+      - server
+
+package_groups:
+  browsers:
+    firefox:
+      name: Firefox
+      packages:
+        pacman:
+          - firefox
+    brave:
+      name: Brave
+      packages:
+        aur:
+          - brave-bin
+        flatpak:
+          - com.brave.Browser
+    chromium:
+      name: Chromium
+      packages:
+        pacman:
+          - chromium
+    vivaldi:
+      name: Vivaldi
+      packages:
+        pacman:
+          - vivaldi
+    none:
+      name: None
+      packages: {}
+
+  office_suites:
+    libreoffice:
+      name: LibreOffice
+      packages:
+        pacman:
+          - libreoffice-fresh
+    onlyoffice:
+      name: OnlyOffice
+      packages:
+        aur:
+          - onlyoffice-bin
+    both:
+      name: LibreOffice And OnlyOffice
+      includes:
+        - libreoffice
+        - onlyoffice
+    none:
+      name: None
+      packages: {}
+
+  multimedia:
+    vlc:
+      name: VLC
+      packages:
+        pacman:
+          - vlc
+    mpv:
+      name: MPV
+      packages:
+        pacman:
+          - mpv
+    celluloid:
+      name: Celluloid
+      packages:
+        pacman:
+          - celluloid
+    spotify:
+      name: Spotify
+      packages:
+        pacman:
+          - spotify-launcher
+    jellyfin:
+      name: Jellyfin
+      packages:
+        flatpak:
+          - com.github.iwalton3.jellyfin-media-player
+    kodi:
+      name: Kodi
+      packages:
+        pacman:
+          - kodi
+
+  development_languages:
+    python:
+      name: Python
+      packages:
+        pacman:
+          - python
+          - python-pip
+    node:
+      name: Node.js
+      packages:
+        pacman:
+          - nodejs
+          - npm
+    java:
+      name: Java
+      packages:
+        pacman:
+          - jdk-openjdk
+    go:
+      name: Go
+      packages:
+        pacman:
+          - go
+    rust:
+      name: Rust
+      packages:
+        pacman:
+          - rust
+    php:
+      name: PHP
+      packages:
+        pacman:
+          - php
+          - composer
+    csharp:
+      name: C#
+      packages:
+        pacman:
+          - dotnet-sdk
+    cpp:
+      name: C And C++
+      packages:
+        pacman:
+          - base-devel
+    ruby:
+      name: Ruby
+      packages:
+        pacman:
+          - ruby
+
+  containers:
+    docker:
+      name: Docker
+      packages:
+        pacman:
+          - docker
+          - docker-compose
+    podman:
+      name: Podman
+      packages:
+        pacman:
+          - podman
+    distrobox:
+      name: Distrobox
+      packages:
+        pacman:
+          - distrobox
+    toolbox:
+      name: Toolbox
+      packages:
+        pacman:
+          - toolbox
+
+  virtualization:
+    qemu-kvm:
+      name: QEMU/KVM
+      packages:
+        pacman:
+          - qemu-full
+          - virt-manager
+          - dnsmasq
+          - edk2-ovmf
+    virtualbox:
+      name: VirtualBox
+      packages:
+        pacman:
+          - virtualbox
+          - virtualbox-host-dkms
+    vmware-tools:
+      name: VMware Tools
+      packages:
+        pacman:
+          - open-vm-tools
+
+  kernels:
+    linux:
+      packages:
+        pacman:
+          - linux
+          - linux-headers
+    linux-lts:
+      packages:
+        pacman:
+          - linux-lts
+          - linux-lts-headers
+    linux-zen:
+      packages:
+        pacman:
+          - linux-zen
+          - linux-zen-headers
+    linux-hardened:
+      packages:
+        pacman:
+          - linux-hardened
+          - linux-hardened-headers
+
+  drivers:
+    auto-detect:
+      strategy: hardware-detection
+      packages: {}
+    nvidia-proprietary:
+      packages:
+        aur:
+          - nvidia
+    nvidia-open:
+      packages:
+        pacman:
+          - nvidia-open
+    amd:
+      packages:
+        pacman:
+          - amd-ucode
+          - mesa
+          - vulkan-radeon
+    intel:
+      packages:
+        pacman:
+          - intel-ucode
+          - mesa
+          - vulkan-intel
+
+  filesystems:
+    btrfs:
+      packages:
+        pacman:
+          - btrfs-progs
+    ext4:
+      packages:
+        pacman:
+          - e2fsprogs
+    xfs:
+      packages:
+        pacman:
+          - xfsprogs
+
+  snapshots:
+    snapper:
+      packages:
+        pacman:
+          - snapper
+    timeshift:
+      packages:
+        pacman:
+          - timeshift
+
+  shells:
+    bash:
+      packages:
+        pacman:
+          - bash
+    zsh:
+      packages:
+        pacman:
+          - zsh
+    fish:
+      packages:
+        pacman:
+          - fish
+
+  terminals:
+    konsole:
+      packages:
+        pacman:
+          - konsole
+    kitty:
+      packages:
+        pacman:
+          - kitty
+    alacritty:
+      packages:
+        pacman:
+          - alacritty
+    ghostty:
+      packages:
+        pacman:
+          - ghostty
+
+  editors:
+    kate:
+      packages:
+        pacman:
+          - kate
+    code:
+      packages:
+        pacman:
+          - code
+    neovim:
+      packages:
+        pacman:
+          - neovim
+    emacs:
+      packages:
+        pacman:
+          - emacs
+
+  themes:
+    gnegnolios-dark:
+      name: GnegnoliOS Dark
+      packages:
+        pacman:
+          - gnegnolios-branding
+    gnegnolios-crimson:
+      name: GnegnoliOS Crimson
+      packages:
+        pacman:
+          - gnegnolios-branding
+    gnegnolios-steel:
+      name: GnegnoliOS Steel
+      packages:
+        pacman:
+          - gnegnolios-branding
+
+  optional_services:
+    bluetooth:
+      packages:
+        pacman:
+          - bluez
+          - bluez-utils
+    cups:
+      packages:
+        pacman:
+          - cups
+          - system-config-printer
+    avahi:
+      packages:
+        pacman:
+          - avahi
+    samba:
+      packages:
+        pacman:
+          - samba
+    openssh:
+      packages:
+        pacman:
+          - openssh
+    tailscale:
+      packages:
+        pacman:
+          - tailscale
+    syncthing:
+      packages:
+        pacman:
+          - syncthing
+    kde-connect:
+      packages:
+        pacman:
+          - kdeconnect
+
+  privacy:
+    ufw:
+      packages:
+        pacman:
+          - ufw
+    fail2ban:
+      packages:
+        pacman:
+          - fail2ban
+    dns-over-https:
+      packages:
+        manual:
+          - dns-over-https-profile
+    flatpak-sandbox:
+      packages:
+        pacman:
+          - flatpak
+    firejail:
+      packages:
+        pacman:
+          - firejail
+    apparmor:
+      packages:
+        pacman:
+          - apparmor
+
+  extra_tools:
+    gparted:
+      packages:
+        pacman:
+          - gparted
+    bleachbit:
+      packages:
+        pacman:
+          - bleachbit
+    filezilla:
+      packages:
+        pacman:
+          - filezilla
+    krita:
+      packages:
+        pacman:
+          - krita
+    inkscape:
+      packages:
+        pacman:
+          - inkscape
+    obs:
+      packages:
+        pacman:
+          - obs-studio
+    steam:
+      packages:
+        pacman:
+          - steam
+    bottles:
+      packages:
+        flatpak:
+          - com.usebottles.bottles
+    heroic:
+      packages:
+        flatpak:
+          - com.heroicgameslauncher.hgl
+
+summary:
+  fields:
+    - desktop
+    - kernel
+    - filesystem
+    - browser
+    - office_suite
+    - selected_profiles
+    - driver
+    - disk
+    - package_sources
+  allow_backtracking: true

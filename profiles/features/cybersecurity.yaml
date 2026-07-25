@@ -1,0 +1,8 @@
+id: cybersecurity
+
+packages:
+  - nmap
+  - wireshark-qt
+  - tcpdump
+  - openvpn
+  - wireguard-tools

@@ -1,0 +1,9 @@
+id: home
+
+packages:
+  - firefox
+  - dolphin
+  - ark
+  - spectacle
+  - partitionmanager
+  - power-profiles-daemon

@@ -1,0 +1,38 @@
+packages:
+  - base
+  - linux-firmware
+  - mkinitcpio
+  - archiso
+  - mkinitcpio-archiso
+  - mkinitcpio-nfs-utils
+  - nbd
+  - pv
+
+  - grub
+  - efibootmgr
+
+  - systemd
+  - systemd-sysvcompat
+
+  - syslinux
+
+  - sudo
+  - bash
+  - coreutils
+
+  - networkmanager
+
+  - flatpak
+  - pipewire
+  - pipewire-pulse
+  - wireplumber
+
+  - btrfs-progs
+  - snapper
+
+  - ufw
+  - fwupd
+  - sof-firmware
+
+  - virtualbox-guest-utils
+  - plymouth

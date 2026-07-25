@@ -1,0 +1,12 @@
+id: music-production
+
+packages:
+  - ardour
+  - audacity
+  - carla
+  - helvum
+  - easyeffects
+  - qjackctl
+  - pipewire-jack
+  - lsp-plugins
+  - calf

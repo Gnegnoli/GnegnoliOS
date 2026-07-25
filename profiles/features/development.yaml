@@ -1,8 +1,23 @@
 id: development
 
 packages:
+  - base-devel
   - git
   - github-cli
+  - code
   - neovim
   - docker
   - docker-compose
+  - podman
+  - distrobox
+  - nodejs
+  - npm
+  - python
+  - python-pip
+  - jdk-openjdk
+  - rust
+  - go
+  - php
+  - composer
+  - mariadb-clients
+  - postgresql-libs

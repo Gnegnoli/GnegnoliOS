@@ -1,0 +1,10 @@
+id: server
+
+packages:
+  - openssh
+  - nginx
+  - mariadb
+  - postgresql
+  - valkey
+  - fail2ban
+  - ufw

@@ -4,23 +4,25 @@ pkgrel=1
 pkgdesc="Release files for GnegnoliOS"
 arch=('any')
 license=('custom')
+install=gnegnolios-release.install
 
 source=(
     "os-release"
-    "os-release.etc"
 )
 
 sha256sums=(
-    'SKIP'
     'SKIP'
 )
 
 package() {
 
     install -Dm644 "$srcdir/os-release" \
-        "$pkgdir/usr/lib/os-release"
+        "$pkgdir/usr/share/gnegnolios/os-release"
 
-    install -Dm644 "$srcdir/os-release.etc" \
-        "$pkgdir/etc/os-release"
+    install -Dm755 "$startdir/files/usr/share/libalpm/scripts/gnegnolios-os-release" \
+        "$pkgdir/usr/share/libalpm/scripts/gnegnolios-os-release"
+
+    install -Dm644 "$startdir/files/usr/share/libalpm/hooks/90-gnegnolios-os-release.hook" \
+        "$pkgdir/usr/share/libalpm/hooks/90-gnegnolios-os-release.hook"
 
 }

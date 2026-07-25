@@ -1,0 +1,11 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = filesystem
+Target = gnegnolios-release
+
+[Action]
+Description = Applying GnegnoliOS release metadata...
+When = PostTransaction
+Exec = /usr/share/libalpm/scripts/gnegnolios-os-release

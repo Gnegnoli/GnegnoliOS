@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -eu
+
+if ! command -v calamares >/dev/null 2>&1; then
+    printf '%s\n' "Calamares is not installed. Install or provide the Calamares runtime before launching the installer." >&2
+    exit 127
+fi
+
+exec sudo -E calamares "$@"

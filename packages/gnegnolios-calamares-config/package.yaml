@@ -1,0 +1,21 @@
+name: gnegnolios-calamares-config
+
+description: |
+  Calamares settings, branding, and launcher integration for GnegnoliOS.
+
+version: "0.1"
+
+enabled: true
+
+build: true
+
+install:
+  iso: true
+  repository: true
+
+dependencies:
+  - gnegnolios-release
+  - gnegnolios-branding
+  - gnegnolios-installer-config
+
+build_system: makepkg

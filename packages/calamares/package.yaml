@@ -1,0 +1,16 @@
+name: calamares
+
+description: |
+  Calamares installer framework, built from upstream release (not in official Arch repos).
+
+version: "3.4.2"
+
+enabled: true
+
+build: true
+
+install:
+  iso: true
+  repository: true
+
+build_system: makepkg

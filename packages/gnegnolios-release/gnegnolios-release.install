@@ -1,0 +1,7 @@
+post_install() {
+    /usr/share/libalpm/scripts/gnegnolios-os-release || true
+}
+
+post_upgrade() {
+    /usr/share/libalpm/scripts/gnegnolios-os-release || true
+}

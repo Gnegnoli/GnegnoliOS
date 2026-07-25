@@ -1,0 +1,9 @@
+id: ai-machine-learning
+
+packages:
+  - python
+  - python-pip
+  - jupyter-notebook
+  - python-pytorch
+  - python-tensorflow
+  - ollama

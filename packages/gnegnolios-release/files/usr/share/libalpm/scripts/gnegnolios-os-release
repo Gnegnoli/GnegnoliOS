@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -eu
+
+release_file="/usr/share/gnegnolios/os-release"
+
+if [ ! -f "$release_file" ]; then
+    exit 0
+fi
+
+install -Dm644 "$release_file" /usr/lib/os-release
+ln -sfn ../usr/lib/os-release /etc/os-release

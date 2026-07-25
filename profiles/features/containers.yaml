@@ -1,0 +1,8 @@
+id: containers
+
+packages:
+  - docker
+  - docker-compose
+  - podman
+  - distrobox
+  - toolbox

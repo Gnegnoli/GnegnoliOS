@@ -1,0 +1,9 @@
+id: office
+
+packages:
+  - libreoffice-fresh
+  - okular
+  - hunspell
+  - hunspell-en_us
+  - cups
+  - system-config-printer

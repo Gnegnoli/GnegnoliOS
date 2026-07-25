@@ -3,5 +3,8 @@ id: gaming
 packages:
   - steam
   - lutris
+  - wine
+  - winetricks
   - gamemode
   - mangohud
+  - obs-studio
