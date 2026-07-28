@@ -181,6 +181,85 @@ bootloader_conf = {"efiBootLoaderVar": "packagechooser_bootloader"}
     "---\n" + yaml.safe_dump(bootloader_conf, sort_keys=False)
 )
 
+# Express: fully static package list (no packagechooser pages at all).
+# fixed_choices maps a defaults-style key to one chosen option id per
+# category; category names here mirror DEFAULTS_KEY (Task 2) inverted.
+FIXED_CHOICE_CATEGORY = {
+    "browser": "browsers",
+    "office_suite": "office_suites",
+    "kernel": "kernels",
+    "shell": "shells",
+    "terminal": "terminals",
+    "editor": "editors",
+    "theme": "themes",
+    "driver": "drivers",
+    # filesystem/snapshots are not package-list concerns here:
+    # filesystem is handled by partition.conf, snapshots already has
+    # its own packagechooser page in Guided/Advanced and Express takes
+    # the plain defaults.snapshots value below.
+}
+
+express_mode = next(m for m in catalog["modes"] if m["id"] == "express")
+express_packages = set()
+
+for profile_id in express_mode.get("include_profiles", []):
+    express_packages.update(resolve_option_packages("usage_profiles", profile_id))
+
+for field, option_id in express_mode.get("fixed_choices", {}).items():
+    category_id = FIXED_CHOICE_CATEGORY.get(field)
+    if category_id is None:
+        continue
+    express_packages.update(resolve_option_packages(category_id, option_id))
+
+express_packages.update(resolve_option_packages("snapshots", defaults.get("snapshots", "snapper")))
+
+if not express_packages:
+    print("ERROR: Express mode resolved to zero packages", file=sys.stderr)
+    sys.exit(1)
+
+packages_express = {
+    "backend": "pacman",
+    "skip_if_no_internet": False,
+    "update_db": True,
+    "update_system": False,
+    "pacman": {
+        "num_retries": 2,
+        "disable_download_timeout": True,
+        "needed_only": True,
+    },
+    "operations": [{"install": sorted(express_packages)}],
+}
+(calamares_root / "modules" / "packages-express.conf").write_text(
+    "---\n" + yaml.safe_dump(packages_express, sort_keys=False)
+)
+
+settings_express = {
+    "modules-search": ["local"],
+    "instances": [
+        {"id": "express", "module": "packages", "config": "packages-express.conf"},
+    ],
+    "sequence": [
+        {"show": ["welcome", "locale", "keyboard", "partition", "users", "summary"]},
+        {"exec": [
+            "partition", "mount", "unpackfs", "machineid", "fstab", "locale",
+            "keyboard", "localecfg", "users", "displaymanager", "networkcfg",
+            "hwclock", "shellprocess@driverdetect", "services-systemd",
+            "packages@express", "initcpio", "grubcfg", "bootloader", "umount",
+        ]},
+        {"show": ["finished"]},
+    ],
+    "branding": "gnegnolios",
+    "prompt-install": True,
+    "dont-chroot": False,
+    "oem-setup": False,
+    "disable-cancel": False,
+    "disable-cancel-during-exec": True,
+    "hide-back-and-next-during-exec": True,
+}
+(calamares_root / "settings-express.conf").write_text(
+    "---\n" + yaml.safe_dump(settings_express, sort_keys=False)
+)
+
 print("Generated packagechooser configs for: "
       + ", ".join(c["id"] for c in catalog["categories"] if c["id"] not in ADVANCED_ONLY))
 PY
