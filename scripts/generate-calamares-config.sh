@@ -260,8 +260,88 @@ settings_express = {
     "---\n" + yaml.safe_dump(settings_express, sort_keys=False)
 )
 
-print("Generated packagechooser configs for: "
-      + ", ".join(c["id"] for c in catalog["categories"] if c["id"] not in ADVANCED_ONLY))
+guided_category_ids = [c["id"] for c in catalog["categories"] if c["id"] not in ADVANCED_ONLY]
+
+
+def packagechooser_instances(category_ids):
+    return [
+        {"id": cid, "module": "packagechooser", "config": f"packagechooser-{cid}.conf"}
+        for cid in category_ids
+    ]
+
+
+def build_settings(category_ids, extra_instances, extra_show, extra_exec_before_packages, partition_config=None):
+    instances = packagechooser_instances(category_ids) + extra_instances
+    if partition_config:
+        instances.append({"id": "partition", "module": "partition", "config": partition_config})
+
+    show = (
+        ["welcome", "locale", "keyboard"]
+        + [f"packagechooser@{cid}" for cid in category_ids]
+        + extra_show
+        + ["partition", "users", "summary"]
+    )
+
+    exec_ = (
+        ["partition", "mount", "unpackfs", "machineid", "fstab", "locale",
+         "keyboard", "localecfg", "users", "displaymanager", "networkcfg", "hwclock"]
+        + extra_exec_before_packages
+        + ["services-systemd", "packages", "initcpio", "grubcfg", "bootloader", "umount"]
+    )
+
+    return {
+        "modules-search": ["local"],
+        "instances": instances,
+        "sequence": [
+            {"show": show},
+            {"exec": exec_},
+            {"show": ["finished"]},
+        ],
+        "branding": "gnegnolios",
+        "prompt-install": True,
+        "dont-chroot": False,
+        "oem-setup": False,
+        "disable-cancel": False,
+        "disable-cancel-during-exec": True,
+        "hide-back-and-next-during-exec": True,
+    }
+
+
+settings_guided = build_settings(
+    category_ids=guided_category_ids,
+    extra_instances=[],
+    extra_show=[],
+    extra_exec_before_packages=["shellprocess@driverdetect"],
+)
+(calamares_root / "settings-guided.conf").write_text(
+    "---\n" + yaml.safe_dump(settings_guided, sort_keys=False)
+)
+
+advanced_category_ids = guided_category_ids  # same base categories, plus the three below
+settings_advanced = build_settings(
+    category_ids=advanced_category_ids,
+    extra_instances=[
+        {"id": "kernel", "module": "packagechooser", "config": "packagechooser-kernel.conf"},
+        {"id": "drivers", "module": "packagechooser", "config": "packagechooser-drivers.conf"},
+        {"id": "bootloader", "module": "packagechooser", "config": "packagechooser-bootloader.conf"},
+    ],
+    extra_show=["packagechooser@kernel", "packagechooser@drivers", "packagechooser@bootloader"],
+    extra_exec_before_packages=[],
+    partition_config="partition-advanced.conf",
+)
+(calamares_root / "settings-advanced.conf").write_text(
+    "---\n" + yaml.safe_dump(settings_advanced, sort_keys=False)
+)
+
+# Plain settings.conf is the fallback used when Calamares is launched
+# without -c (bypassing gnegnolios-install). Make it identical to
+# Guided so a direct launch never regresses to the old "no chooser"
+# behavior.
+(calamares_root / "settings.conf").write_text(
+    "---\n" + yaml.safe_dump(settings_guided, sort_keys=False)
+)
+
+print("Generated settings-express.conf, settings-guided.conf, settings-advanced.conf, settings.conf")
 PY
 }
 
