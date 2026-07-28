@@ -50,20 +50,13 @@ publish_package_to_local_repository() {
         echo "ERROR: no package artifact generated in $package_dir"
         exit 1
     fi
+
+    sudo pacman -U --noconfirm --needed "$package_dir"/*.pkg.tar* >/dev/null
 }
 
 configure_local_repository() {
 
-    local package_file
-    local has_packages=false
-
-    for package_file in "$LOCAL_REPO_DIR"/*.pkg.tar*; do
-        [ -f "$package_file" ] || continue
-        has_packages=true
-        break
-    done
-
-    if [ "$has_packages" != "true" ]; then
+    if grep -q "^\[$LOCAL_REPO_NAME\]" "$WORKSPACE/pacman.conf" 2>/dev/null; then
         return
     fi
 
@@ -115,6 +108,7 @@ build_packages() {
     echo
 
     prepare_local_repository
+    configure_local_repository
 
     for package_dir in "$PROJECT_ROOT"/packages/*; do
 
@@ -147,7 +141,5 @@ build_packages() {
         publish_package_to_local_repository "$package_dir"
 
     done
-
-    configure_local_repository
 
 }
