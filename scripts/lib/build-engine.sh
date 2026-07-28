@@ -29,6 +29,10 @@ run_build() {
     echo "Generating project files..."
     generate_files
 
+    echo "Validating Calamares configuration..."
+    source "$PROJECT_ROOT/scripts/validate-calamares-config.sh"
+    validate_calamares_config
+
     echo
 
     build_packages
