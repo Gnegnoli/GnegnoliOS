@@ -39,6 +39,8 @@ CLAUDE.md
 .github/copilot-instructions.md
 .cursor/
 .aider*
+.superpowers/
+docs/superpowers/
 
 # Python
 __pycache__/
