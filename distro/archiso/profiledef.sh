@@ -5,7 +5,7 @@ iso_name="gnegnolios"
 iso_label="GNEGNOLIOS"
 iso_publisher="GnegnoliOS"
 iso_application="GnegnoliOs Live"
-iso_version="$(date --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" +%Y.%m.%d)"
+iso_version="$(date --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" +%Y.%m.%d-%H%M%S)"
 install_dir="gnegnolios"
 buildmodes=('iso')
 bootmodes=('bios.syslinux'

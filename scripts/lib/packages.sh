@@ -16,7 +16,7 @@ build_package() {
 
         rm -rf pkg src
 
-        makepkg -f --noconfirm
+        makepkg -fs --noconfirm
     )
 
     echo
