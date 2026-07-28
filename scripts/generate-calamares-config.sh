@@ -141,11 +141,12 @@ write_packagechooser_conf("drivers", driver_ids, "required", default_id=driver_i
 # design spec's Constraints section).
 filesystem_category = next(c for c in catalog["categories"] if c["id"] == "filesystems")
 fs_options = filesystem_category["options"]
-default_fs = defaults.get("filesystem", fs_options[0])
 
 if not fs_options:
     print("ERROR: category 'filesystems' has no options", file=sys.stderr)
     sys.exit(1)
+
+default_fs = defaults.get("filesystem", fs_options[0])
 
 partition_fixed = {"defaultFileSystemType": default_fs}
 (calamares_root / "modules" / "partition.conf").write_text(
