@@ -118,17 +118,70 @@ Details in [`docs/SMART_INSTALLER.md`](docs/SMART_INSTALLER.md).
 
 ## Build
 
+### Prerequisites
+
+Build from an Arch Linux host (or an Arch container/VM — `mkarchiso` needs a
+real Arch environment, not just any Linux):
+
 ```bash
+sudo pacman -S --needed archiso base-devel yq
+```
+
+- `archiso` — provides `mkarchiso` and the archiso profile tooling
+- `base-devel` — provides `makepkg` to build the custom packages
+- `yq` — reads `config/distro.yaml` and every `package.yaml`
+- `sudo` access — `mkarchiso` runs as root (chroot, squashfs, etc.)
+
+### Build the ISO
+
+```bash
+git clone https://github.com/Gnegnoli/GnegnoliOS.git
+cd GnegnoliOS
 ./scripts/build.sh
 ```
 
 The build:
 1. loads `config/distro.yaml` and validates the configuration;
 2. composes the package list from `profiles/base.yaml` + selected desktop, kernel, and feature profiles;
-3. compiles the custom packages in `packages/` and publishes them to a local pacman repository;
+3. compiles the custom packages in `packages/` (those with `enabled: true` and `build: true` in their `package.yaml`) and publishes them to a local pacman repository;
 4. generates the ISO via `mkarchiso`.
 
-Output lands in `build/output/gnegnolios-*.iso`.
+Build layout (all under `build/`, gitignored):
+
+| Path | Content |
+|---|---|
+| `build/profile/` | assembled archiso workspace (`packages.x86_64`, airootfs, etc.) |
+| `build/cache/` | `mkarchiso` work directory (safe to delete, rebuilt each run) |
+| `build/output/` | final ISO — `gnegnolios-*.iso` |
+
+Rebuilding after a package or config change re-runs the whole pipeline; there's
+no incremental package build yet (see TODO below).
+
+### Test the ISO
+
+```bash
+qemu-system-x86_64 -enable-kvm -m 4096 -cdrom build/output/gnegnolios-*.iso
+```
+
+Or flash it to a USB drive with `dd`/Ventoy/Rufus and boot real hardware.
+
+## TODO / planned features
+
+Rough backlog, not yet scheduled — mainly for the Control Center app
+(`applications/control-center/`), which currently has several "Not available"
+placeholders:
+
+- [ ] Package picker (search + multi-select) for Install/Remove Packages
+- [ ] Add Repo dialog (name, URL, signature policy → append to `pacman.conf`)
+- [ ] Proton/Kernel version picker (list installed, pick default, remove)
+- [ ] Snapshot restore flow (list snapper snapshots, confirm, rollback)
+- [ ] Controller Setup page (detect gamepads, map profiles)
+- [ ] MangoHud config toggle (edit `MangoHud.conf`, not just launch it)
+- [ ] Driver Manager page (detect GPU, offer proprietary/open switch)
+- [ ] Theming pages (Themes/Icons/Wallpapers/Fonts — currently stubs)
+- [ ] Settings page (General/Notifications/Appearance — currently stubs)
+- [ ] i18n: translate UI strings per system locale (currently English-only)
+- [ ] Incremental package builds in `scripts/build.sh` (skip unchanged packages)
 
 ## Project status
 

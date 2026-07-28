@@ -4,6 +4,9 @@ pkgrel=1
 pkgdesc="Branding assets for GnegnoliOS"
 arch=('any')
 license=('custom')
+depends=('plymouth')
+
+install=gnegnolios-branding.install
 
 source=()
 

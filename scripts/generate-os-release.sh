@@ -20,6 +20,7 @@ VERSION_ID="$VERSION"
 HOME_URL="https://gnegnolios.org"
 SUPPORT_URL="https://github.com/GnegnoliOS"
 BUG_REPORT_URL="https://github.com/GnegnoliOS"
+LOGO=gnegnolios-start
 EOF
 
 echo "Generated os-release successfully."
