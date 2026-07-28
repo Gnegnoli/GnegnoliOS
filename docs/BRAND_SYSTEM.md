@@ -63,6 +63,6 @@ Do not use skulls, demons, wings, dragons, monsters, anime styling, or decorativ
 
 Official wallpapers should be dark, architectural, atmospheric, and material-driven. Use cathedral scale, fog, stone, steel, volcanic surfaces, and restrained embers. Do not include characters, people, monsters, weapons as the main subject, or literal horror imagery.
 
-## Creative Prompt
+## Creative Prompt for AI generations
 
 Design assets for GnegnoliOS, a premium Arch Linux distribution with a luxury enterprise identity. Combine corporate minimalism, gothic architecture, dark fantasy atmosphere, forged steel, volcanic stone, brushed metal, cathedral-inspired geometry, medieval heraldry, industrial luxury, elegant symmetry, matte black surfaces, subtle crimson accents, cinematic chiaroscuro lighting, realistic materials, premium UI/UX aesthetics, Apple-level polish, IBM professionalism, Fractal Design minimalism, and high-end software branding. Avoid horror, demons, skulls, neon colors, cyberpunk, anime, cartoon, gaming cliches, or excessive ornamentation. Every design should feel timeless, premium, exclusive, and suitable for an operating system used by professionals.
