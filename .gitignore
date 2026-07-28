@@ -9,6 +9,17 @@ packages/*/src/
 packages/*.pkg.tar.zst
 packages/*/*.pkg.tar.zst
 
+# Generated Calamares configs (scripts/generate-calamares-config.sh)
+packages/gnegnolios-calamares-config/rootfs/etc/calamares/modules/packagechooser-*.conf
+packages/gnegnolios-calamares-config/rootfs/etc/calamares/modules/partition.conf
+packages/gnegnolios-calamares-config/rootfs/etc/calamares/modules/partition-advanced.conf
+packages/gnegnolios-calamares-config/rootfs/etc/calamares/modules/bootloader.conf
+packages/gnegnolios-calamares-config/rootfs/etc/calamares/modules/packages-express.conf
+packages/gnegnolios-calamares-config/rootfs/etc/calamares/settings.conf
+packages/gnegnolios-calamares-config/rootfs/etc/calamares/settings-express.conf
+packages/gnegnolios-calamares-config/rootfs/etc/calamares/settings-guided.conf
+packages/gnegnolios-calamares-config/rootfs/etc/calamares/settings-advanced.conf
+
 # Logs
 *.log
 
