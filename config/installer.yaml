@@ -69,9 +69,6 @@ modes:
       - development_languages
       - containers
       - virtualization
-      - drivers
-      - kernels
-      - filesystems
       - snapshots
       - shells
       - terminals
