@@ -1,0 +1,23 @@
+pkgname=gnegnolios-control-center
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Gnegnoli Control Center desktop application"
+arch=('any')
+license=('custom')
+depends=('python' 'python-pyqt6' 'python-psutil' 'qt6-svg' 'pacman-contrib' 'polkit' 'gnegnolios-branding')
+
+source=()
+sha256sums=()
+
+package() {
+    appdir="$startdir/../../applications/control-center"
+
+    install -d "$pkgdir/usr/share/gnegnolios-control-center"
+    cp -a "$appdir"/*.py "$appdir/pages" "$appdir/assets" \
+        "$pkgdir/usr/share/gnegnolios-control-center/"
+
+    install -Dm755 "$startdir/gnegnoli-control-center" \
+        "$pkgdir/usr/bin/gnegnoli-control-center"
+    install -Dm644 "$startdir/gnegnoli-control-center.desktop" \
+        "$pkgdir/usr/share/applications/gnegnoli-control-center.desktop"
+}

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Gnegnoli Control Center
+GenericName=System Control Center
+Comment=Manage updates, drivers, kernels, gaming tools and system settings
+Exec=gnegnoli-control-center
+Icon=/usr/share/gnegnolios/logos/gnegnolios-mark.png
+Categories=System;Settings;
+Terminal=false
+StartupNotify=true

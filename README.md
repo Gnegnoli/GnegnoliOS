@@ -94,9 +94,10 @@ Full details in [`docs/BRAND_SYSTEM.md`](docs/BRAND_SYSTEM.md).
 
 ```
 GnegnoliOS/
+├── applications/    # apps developed for GnegnoliOS (Control Center, ...)
 ├── config/          # distro.yaml — single source of truth, installer.yaml — Smart Installer catalog
 ├── distro/          # archiso profile, everything needed to generate the ISO
-├── packages/        # custom packages (branding, calamares-config, installer-config, release...)
+├── packages/        # custom packages (branding, calamares-config, installer-config, release, control-center...)
 ├── profiles/        # desktop / kernel / feature package sets, combined at build time
 ├── calamares/        # installer configuration
 ├── scripts/         # build engine (scripts/lib/*.sh)

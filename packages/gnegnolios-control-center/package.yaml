@@ -1,0 +1,21 @@
+name: gnegnolios-control-center
+
+description: |
+  Gnegnoli Control Center desktop application (PyQt6), source in
+  applications/control-center/. Ships a launcher and a .desktop entry so it
+  always shows up in the application menu.
+
+version: "1.0.0"
+
+enabled: true
+
+build: true
+
+install:
+  iso: true
+  repository: true
+
+dependencies:
+  - gnegnolios-branding
+
+build_system: makepkg
