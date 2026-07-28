@@ -7,4 +7,4 @@ if ! command -v calamares >/dev/null 2>&1; then
     exit 127
 fi
 
-exec sudo -E calamares "$@"
+exec pkexec calamares "$@"
