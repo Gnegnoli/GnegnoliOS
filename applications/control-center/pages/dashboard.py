@@ -263,7 +263,7 @@ class DashboardPage(QWidget):
         now_bytes = _disk_bytes()
         delta_mb = (now_bytes - self._prev_disk_bytes) / (1024 ** 2)
         self._prev_disk_bytes = now_bytes
-        # ponytail: scaled against an arbitrary 20MB/interval ceiling for the
+        # scaled against an arbitrary 20MB/interval ceiling for the
         # sparkline's 0-100 range; raise the ceiling if it clips on fast disks.
         self.disk_spark.push(min(100, delta_mb / 20 * 100))
 

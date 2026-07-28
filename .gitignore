@@ -33,6 +33,13 @@ packages/gnegnolios-calamares-config/rootfs/etc/calamares/settings-advanced.conf
 .vscode/
 .idea/
 
+# AI assistant tooling (local config, never distributed)
+.claude/
+CLAUDE.md
+.github/copilot-instructions.md
+.cursor/
+.aider*
+
 # Python
 __pycache__/
 

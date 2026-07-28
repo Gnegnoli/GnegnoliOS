@@ -9,8 +9,8 @@ from PyQt6.QtCore import QProcess
 from PyQt6.QtWidgets import QMessageBox
 
 # Binaries whose pacman package name doesn't match the executable name.
-# ponytail: covers the binaries this app actually shells out to; extend if a
-# new action wires up a binary not listed here (falls back to same name).
+# Covers the binaries this app actually shells out to; extend if a new
+# action wires up a binary not listed here (falls back to same name).
 BINARY_TO_PACKAGE = {
     "wineboot": "wine",
     "winecfg": "wine",
