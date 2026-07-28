@@ -20,7 +20,7 @@ mode="$(zenity --list \
     TRUE  Express  "Ready-to-use system, no questions asked" \
     FALSE Guided   "Recommended: pick software by category" \
     FALSE Advanced "Full control: kernel, filesystem, bootloader, packages" \
-    --hide-header)"
+    --hide-header)" || exit 0
 
 if [ -z "$mode" ]; then
     exit 0
