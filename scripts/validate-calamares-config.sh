@@ -54,6 +54,21 @@ for settings_name in ("settings.conf", "settings-express.conf", "settings-guided
             if module == "packagechooser" and not config_doc.get("items"):
                 errors.append(f"{config_name}: empty items list")
 
+    # Every declared instance must resolve, even ones never referenced via
+    # `module@id` in the sequence (e.g. a plain "bootloader" step still uses
+    # its instance's config override) — this is what let a sparse/missing
+    # bootloader.conf slip through validation previously.
+    for instance in doc.get("instances", []):
+        config_name = instance.get("config")
+
+        if config_name is None:
+            continue
+
+        config_path = calamares_root / "modules" / config_name
+
+        if not config_path.exists():
+            errors.append(f"{settings_name}: instance '{instance.get('id')}' references missing config {config_name}")
+
 if errors:
     print("\n".join(errors))
     sys.exit(1)

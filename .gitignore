@@ -14,6 +14,7 @@ packages/gnegnolios-calamares-config/rootfs/etc/calamares/modules/packagechooser
 packages/gnegnolios-calamares-config/rootfs/etc/calamares/modules/partition.conf
 packages/gnegnolios-calamares-config/rootfs/etc/calamares/modules/partition-advanced.conf
 packages/gnegnolios-calamares-config/rootfs/etc/calamares/modules/bootloader.conf
+packages/gnegnolios-calamares-config/rootfs/etc/calamares/modules/bootloader-advanced.conf
 packages/gnegnolios-calamares-config/rootfs/etc/calamares/modules/packages-express.conf
 packages/gnegnolios-calamares-config/rootfs/etc/calamares/settings.conf
 packages/gnegnolios-calamares-config/rootfs/etc/calamares/settings-express.conf

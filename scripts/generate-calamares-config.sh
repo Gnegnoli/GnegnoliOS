@@ -7,7 +7,7 @@ CALAMARES_REL="packages/gnegnolios-calamares-config/rootfs/etc/calamares"
 
 generate_calamares_config() {
 
-    mkdir -p "$CALAMARES_REL/modules"
+    mkdir -p "$PROJECT_ROOT/$CALAMARES_REL/modules"
 
     python3 - "$PROJECT_ROOT" "$CALAMARES_REL" <<'PY'
 import pathlib
@@ -69,13 +69,22 @@ def resolve_option_packages(category_id, option_id):
     return sorted(pkgs)
 
 
+def option_dict(category_id, option_id):
+    """Look up the catalog entry (package_groups/profiles) for one option id."""
+    if category_id == "usage_profiles":
+        return profiles.get(option_id, {})
+
+    group_category = {"kernel": "kernels"}.get(category_id, category_id)
+    return groups.get(group_category, {}).get(option_id, {})
+
+
 def write_packagechooser_conf(category_id, option_ids, mode, default_id=None):
     items = []
 
     for option_id in option_ids:
         items.append({
             "id": option_id,
-            "name": option_id,
+            "name": option_dict(category_id, option_id).get("name", option_id),
             "packages": resolve_option_packages(category_id, option_id),
         })
 
@@ -100,14 +109,17 @@ for category in catalog["categories"]:
     if category_id in ADVANCED_ONLY:
         continue
 
-    if category_id == "usage_profiles":
-        option_ids = list(profiles.keys())
-    else:
-        option_ids = list(groups.get(category_id, {}).keys())
+    option_ids = category["options"]
 
     if not option_ids:
         print(f"ERROR: category '{category_id}' has no options", file=sys.stderr)
         sys.exit(1)
+
+    catalog_dict = profiles if category_id == "usage_profiles" else groups.get(category_id, {})
+    for option_id in option_ids:
+        if option_id not in catalog_dict:
+            print(f"ERROR: option '{option_id}' in category '{category_id}' has no matching package group entry", file=sys.stderr)
+            sys.exit(1)
 
     mode = SELECTION_TO_MODE[category["selection"]]
     default_key = DEFAULTS_KEY.get(category_id)
@@ -118,21 +130,40 @@ for category in catalog["categories"]:
 # Kernel: multiple selection, Advanced-only, no pre-selected default
 # (packagechooser optionalmultiple items don't get a safe default in
 # this generator — see plan Task 3 notes).
-kernel_ids = list(groups.get("kernels", {}).keys())
+kernels_category = next(c for c in catalog["categories"] if c["id"] == "kernels")
+kernel_ids = kernels_category["options"]
 if not kernel_ids:
     print("ERROR: category 'kernels' has no options", file=sys.stderr)
     sys.exit(1)
+for option_id in kernel_ids:
+    if option_id not in groups.get("kernels", {}):
+        print(f"ERROR: option '{option_id}' in category 'kernels' has no matching package group entry", file=sys.stderr)
+        sys.exit(1)
 write_packagechooser_conf("kernel", kernel_ids, "optionalmultiple")
 
 # Drivers: single selection, Advanced-only manual choice. "auto-detect"
 # is excluded here — Guided/Express ship the generic mesa baseline
 # instead (see packages.conf; automatic vendor-specific driver install
 # was found unbuildable with stock Calamares modules, Task 8).
-driver_ids = [d for d in groups.get("drivers", {}).keys() if d != "auto-detect"]
+drivers_category = next(c for c in catalog["categories"] if c["id"] == "drivers")
+driver_ids = [d for d in drivers_category["options"] if d != "auto-detect"]
 if not driver_ids:
     print("ERROR: category 'drivers' has no manual (non-auto-detect) options", file=sys.stderr)
     sys.exit(1)
-write_packagechooser_conf("drivers", driver_ids, "required", default_id=driver_ids[0])
+for option_id in driver_ids:
+    if option_id not in groups.get("drivers", {}):
+        print(f"ERROR: option '{option_id}' in category 'drivers' has no matching package group entry", file=sys.stderr)
+        sys.exit(1)
+
+# Default should be the first catalog-declared driver id that actually
+# resolves to real pacman packages under this project's pacman-only
+# packages backend (e.g. nvidia-proprietary is AUR-only and would
+# resolve to an empty list — see plan review finding).
+default_driver_id = next(
+    (d for d in driver_ids if resolve_option_packages("drivers", d)),
+    driver_ids[0],
+)
+write_packagechooser_conf("drivers", driver_ids, "required", default_id=default_driver_id)
 
 # Filesystem: not a packagechooser. Guided/Express get a fixed
 # defaultFileSystemType with no dropdown. Advanced gets the same
@@ -177,9 +208,34 @@ bootloader_doc = {
     "---\n" + yaml.safe_dump(bootloader_doc, sort_keys=False)
 )
 
-bootloader_conf = {"efiBootLoaderVar": "packagechooser_bootloader"}
+# Full stock Calamares bootloader.conf defaults (verified against
+# calamares/src/modules/bootloader/main.py — most keys are read via bare
+# dict subscript with no fallback, so a sparse config crashes the job).
+# Guided/Express get this as-is (grub fixed, no packagechooser page).
+# Advanced additionally gets efiBootLoaderVar so its bootloader chooser
+# page actually takes effect (see bootloader-advanced.conf below).
+BOOTLOADER_DEFAULTS = {
+    "efiBootLoader": "grub",
+    "kernelSearchPath": "/usr/lib/modules",
+    "kernelPattern": "^vmlinuz.*",
+    "loaderEntries": ["timeout 5", "console-mode keep"],
+    "kernelParams": ["quiet"],
+    "grubInstall": "grub-install",
+    "grubMkconfig": "grub-mkconfig",
+    "grubCfg": "/boot/grub/grub.cfg",
+    "grubProbe": "grub-probe",
+    "efiBootMgr": "efibootmgr",
+    "installEFIFallback": True,
+    "installHybridGRUB": False,
+}
 (calamares_root / "modules" / "bootloader.conf").write_text(
-    "---\n" + yaml.safe_dump(bootloader_conf, sort_keys=False)
+    "---\n" + yaml.safe_dump(BOOTLOADER_DEFAULTS, sort_keys=False)
+)
+
+bootloader_advanced_conf = dict(BOOTLOADER_DEFAULTS)
+bootloader_advanced_conf["efiBootLoaderVar"] = "packagechooser_bootloader"
+(calamares_root / "modules" / "bootloader-advanced.conf").write_text(
+    "---\n" + yaml.safe_dump(bootloader_advanced_conf, sort_keys=False)
 )
 
 # Express: fully static package list (no packagechooser pages at all).
@@ -213,6 +269,11 @@ for field, option_id in express_mode.get("fixed_choices", {}).items():
     express_packages.update(resolve_option_packages(category_id, option_id))
 
 express_packages.update(resolve_option_packages("snapshots", defaults.get("snapshots", "snapper")))
+
+# Generic mesa baseline (same as Guided/Advanced's packages.conf) — Express
+# has its own fully-separate packages-express.conf, so it needs this added
+# explicitly rather than inheriting it from packages.conf.
+express_packages.add("mesa")
 
 if not express_packages:
     print("ERROR: Express mode resolved to zero packages", file=sys.stderr)
@@ -271,10 +332,12 @@ def packagechooser_instances(category_ids):
     ]
 
 
-def build_settings(category_ids, extra_instances, extra_show, extra_exec_before_packages, partition_config=None):
+def build_settings(category_ids, extra_instances, extra_show, extra_exec_before_packages, partition_config=None, bootloader_config=None):
     instances = packagechooser_instances(category_ids) + extra_instances
     if partition_config:
         instances.append({"id": "partition", "module": "partition", "config": partition_config})
+    if bootloader_config:
+        instances.append({"id": "bootloader", "module": "bootloader", "config": bootloader_config})
 
     show = (
         ["welcome", "locale", "keyboard"]
@@ -329,6 +392,7 @@ settings_advanced = build_settings(
     extra_show=["packagechooser@kernel", "packagechooser@drivers", "packagechooser@bootloader"],
     extra_exec_before_packages=[],
     partition_config="partition-advanced.conf",
+    bootloader_config="bootloader-advanced.conf",
 )
 (calamares_root / "settings-advanced.conf").write_text(
     "---\n" + yaml.safe_dump(settings_advanced, sort_keys=False)
