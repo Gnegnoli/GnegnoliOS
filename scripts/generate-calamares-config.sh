@@ -161,6 +161,26 @@ partition_advanced = {
     "---\n" + yaml.safe_dump(partition_advanced, sort_keys=False)
 )
 
+# Bootloader: not in installer.yaml's categories (it's a Calamares-level
+# choice, not a package category) — items are literal here.
+bootloader_doc = {
+    "mode": "required",
+    "method": "legacy",
+    "items": [
+        {"id": "grub", "name": "GRUB"},
+        {"id": "systemd-boot", "name": "systemd-boot"},
+    ],
+    "default": "grub",
+}
+(calamares_root / "modules" / "packagechooser-bootloader.conf").write_text(
+    "---\n" + yaml.safe_dump(bootloader_doc, sort_keys=False)
+)
+
+bootloader_conf = {"efiBootLoaderVar": "packagechooser_bootloader"}
+(calamares_root / "modules" / "bootloader.conf").write_text(
+    "---\n" + yaml.safe_dump(bootloader_conf, sort_keys=False)
+)
+
 print("Generated packagechooser configs for: "
       + ", ".join(c["id"] for c in catalog["categories"] if c["id"] not in ADVANCED_ONLY))
 PY
