@@ -76,9 +76,17 @@ New script, sourced/called from `generate_files()` in `scripts/lib/generators.sh
 
 Fails loudly (matches `add_packages_from_yaml`'s style) if any category resolves to zero items.
 
-### Driver auto-detect (`shellprocess`, exec phase)
+### Driver auto-detect
 
-New small script (e.g. `packages/gnegnolios-calamares-config/rootfs/usr/share/gnegnolios/installer/detect-drivers.sh`, hand-written, not generated) run via a `shellprocess` job before `packages` in Guided's exec sequence. Uses `lspci` to detect GPU vendor, writes the matching driver package list directly into Calamares' `packageOperations` GlobalStorage key (same mechanism `packagechooser` uses) via `calamares-python` or a `contextualprocess` helper — exact GS-write mechanism is an implementation detail for the plan, not the design.
+Deferred: Calamares has no stock module that runs a script at install
+time and feeds its result into `packageOperations` (verified during
+implementation — `shellprocess` cannot write GlobalStorage, and
+writing one would require a custom Python job module, out of scope
+for this round). Guided/Express ship a generic `mesa` baseline
+(`packages.conf`'s static `operations:`) instead of vendor-specific
+auto-detected drivers. Advanced still offers manual vendor-specific
+choice via `packagechooser@drivers` (Task 3 of the implementation
+plan).
 
 ### `/usr/bin/gnegnolios-install`
 
@@ -95,7 +103,6 @@ New, styled after the existing `scripts/validate-installer-catalog.sh`. Runs aft
 - Generator fails the build (non-zero exit, clear message) on: missing `config/installer.yaml` key, empty category, empty package group.
 - Validator fails the build on: dangling `packagechooser@id` reference, empty `items:`.
 - `gnegnolios-install` fails with clear stderr (existing pattern) if `zenity` or `calamares` binaries are missing.
-- Driver auto-detect script: if `lspci` can't identify a known vendor, falls back to no extra driver packages (mesa generic already covers Intel/AMD via existing base packages) rather than failing the install.
 
 ## Testing
 

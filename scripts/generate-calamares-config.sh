@@ -125,8 +125,9 @@ if not kernel_ids:
 write_packagechooser_conf("kernel", kernel_ids, "optionalmultiple")
 
 # Drivers: single selection, Advanced-only manual choice. "auto-detect"
-# is excluded here — Guided/Express use the shellprocess auto-detect
-# script (Task 8) instead of this chooser.
+# is excluded here — Guided/Express ship the generic mesa baseline
+# instead (see packages.conf; automatic vendor-specific driver install
+# was found unbuildable with stock Calamares modules, Task 8).
 driver_ids = [d for d in groups.get("drivers", {}).keys() if d != "auto-detect"]
 if not driver_ids:
     print("ERROR: category 'drivers' has no manual (non-auto-detect) options", file=sys.stderr)
@@ -243,7 +244,7 @@ settings_express = {
         {"exec": [
             "partition", "mount", "unpackfs", "machineid", "fstab", "locale",
             "keyboard", "localecfg", "users", "displaymanager", "networkcfg",
-            "hwclock", "shellprocess@driverdetect", "services-systemd",
+            "hwclock", "services-systemd",
             "packages@express", "initcpio", "grubcfg", "bootloader", "umount",
         ]},
         {"show": ["finished"]},
@@ -311,7 +312,7 @@ settings_guided = build_settings(
     category_ids=guided_category_ids,
     extra_instances=[],
     extra_show=[],
-    extra_exec_before_packages=["shellprocess@driverdetect"],
+    extra_exec_before_packages=[],
 )
 (calamares_root / "settings-guided.conf").write_text(
     "---\n" + yaml.safe_dump(settings_guided, sort_keys=False)
