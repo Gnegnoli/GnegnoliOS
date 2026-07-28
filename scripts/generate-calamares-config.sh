@@ -133,6 +133,33 @@ if not driver_ids:
     sys.exit(1)
 write_packagechooser_conf("drivers", driver_ids, "required", default_id=driver_ids[0])
 
+# Filesystem: not a packagechooser. Guided/Express get a fixed
+# defaultFileSystemType with no dropdown. Advanced gets the same
+# default plus availableFileSystemTypes, which Calamares' partition
+# module natively renders as a dropdown on the automatic/erase-disk
+# partitioning page (verified against partition/Config.cpp — see
+# design spec's Constraints section).
+filesystem_category = next(c for c in catalog["categories"] if c["id"] == "filesystems")
+fs_options = filesystem_category["options"]
+default_fs = defaults.get("filesystem", fs_options[0])
+
+if not fs_options:
+    print("ERROR: category 'filesystems' has no options", file=sys.stderr)
+    sys.exit(1)
+
+partition_fixed = {"defaultFileSystemType": default_fs}
+(calamares_root / "modules" / "partition.conf").write_text(
+    "---\n" + yaml.safe_dump(partition_fixed, sort_keys=False)
+)
+
+partition_advanced = {
+    "defaultFileSystemType": default_fs,
+    "availableFileSystemTypes": fs_options,
+}
+(calamares_root / "modules" / "partition-advanced.conf").write_text(
+    "---\n" + yaml.safe_dump(partition_advanced, sort_keys=False)
+)
+
 print("Generated packagechooser configs for: "
       + ", ".join(c["id"] for c in catalog["categories"] if c["id"] not in ADVANCED_ONLY))
 PY
