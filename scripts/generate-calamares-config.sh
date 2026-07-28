@@ -57,7 +57,9 @@ def resolve_option_packages(category_id, option_id):
         pkgs = set(option.get("packages", {}).get("pacman", []))
         return sorted(pkgs)
 
-    option = groups.get(category_id, {}).get(option_id, {})
+    # Map singular output names to plural group names
+    group_category = {"kernel": "kernels"}.get(category_id, category_id)
+    option = groups.get(group_category, {}).get(option_id, {})
     pkgs = set(option.get("packages", {}).get("pacman", []))
 
     for included_id in option.get("includes", []):
@@ -112,6 +114,24 @@ for category in catalog["categories"]:
     default_id = defaults.get(default_key) if default_key else None
 
     write_packagechooser_conf(category_id, option_ids, mode, default_id)
+
+# Kernel: multiple selection, Advanced-only, no pre-selected default
+# (packagechooser optionalmultiple items don't get a safe default in
+# this generator — see plan Task 3 notes).
+kernel_ids = list(groups.get("kernels", {}).keys())
+if not kernel_ids:
+    print("ERROR: category 'kernels' has no options", file=sys.stderr)
+    sys.exit(1)
+write_packagechooser_conf("kernel", kernel_ids, "optionalmultiple")
+
+# Drivers: single selection, Advanced-only manual choice. "auto-detect"
+# is excluded here — Guided/Express use the shellprocess auto-detect
+# script (Task 8) instead of this chooser.
+driver_ids = [d for d in groups.get("drivers", {}).keys() if d != "auto-detect"]
+if not driver_ids:
+    print("ERROR: category 'drivers' has no manual (non-auto-detect) options", file=sys.stderr)
+    sys.exit(1)
+write_packagechooser_conf("drivers", driver_ids, "required", default_id=driver_ids[0])
 
 print("Generated packagechooser configs for: "
       + ", ".join(c["id"] for c in catalog["categories"] if c["id"] not in ADVANCED_ONLY))
