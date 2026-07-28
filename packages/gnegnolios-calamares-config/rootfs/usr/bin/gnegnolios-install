@@ -7,4 +7,33 @@ if ! command -v calamares >/dev/null 2>&1; then
     exit 127
 fi
 
-exec pkexec calamares "$@"
+if ! command -v zenity >/dev/null 2>&1; then
+    printf '%s\n' "zenity is not installed. Install zenity before launching the installer." >&2
+    exit 127
+fi
+
+mode="$(zenity --list \
+    --title="GnegnoliOS Installer" \
+    --text="Choose an installation mode" \
+    --radiolist \
+    --column="" --column="Mode" --column="Description" \
+    TRUE  Express  "Ready-to-use system, no questions asked" \
+    FALSE Guided   "Recommended: pick software by category" \
+    FALSE Advanced "Full control: kernel, filesystem, bootloader, packages" \
+    --hide-header)"
+
+if [ -z "$mode" ]; then
+    exit 0
+fi
+
+case "$mode" in
+    Express)  conf=/etc/calamares/settings-express.conf ;;
+    Guided)   conf=/etc/calamares/settings-guided.conf ;;
+    Advanced) conf=/etc/calamares/settings-advanced.conf ;;
+    *)
+        printf '%s\n' "Unknown mode: $mode" >&2
+        exit 1
+        ;;
+esac
+
+exec pkexec calamares -c "$conf" "$@"

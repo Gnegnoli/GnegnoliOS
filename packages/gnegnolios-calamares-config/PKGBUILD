@@ -4,6 +4,9 @@ pkgrel=1
 pkgdesc="Calamares configuration for GnegnoliOS"
 arch=('any')
 license=('custom')
+depends=(
+    'zenity'
+)
 optdepends=(
     'calamares: graphical installer runtime'
     'gnegnolios-branding: shared GnegnoliOS artwork'
