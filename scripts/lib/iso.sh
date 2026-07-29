@@ -37,5 +37,5 @@ build_iso() {
     fi
     rm -f "$log_file"
 
-    test -f "$OUTPUT_DIR"/gnegnolios-*.iso
+    compgen -G "$OUTPUT_DIR/gnegnolios-*.iso" >/dev/null
 }
