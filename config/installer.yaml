@@ -237,6 +237,7 @@ categories:
       - xfce4-terminal
       - mate-terminal
       - qterminal
+      - deepin-terminal
 
   - id: editors
     name: Editor
@@ -853,6 +854,10 @@ package_groups:
       packages:
         pacman:
           - qterminal
+    deepin-terminal:
+      packages:
+        pacman:
+          - deepin-terminal
 
   editors:
     kate:

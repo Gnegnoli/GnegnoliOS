@@ -1,0 +1,14 @@
+pkgname=gnegnolios-branding-deepin
+pkgver=0.1
+pkgrel=1
+pkgdesc="Deepin-native branding assets for GnegnoliOS (experimental)"
+arch=('any')
+license=('custom')
+depends=('gnegnolios-branding-common')
+
+source=()
+sha256sums=()
+
+package() {
+    cp -a "$startdir/rootfs/." "$pkgdir"
+}

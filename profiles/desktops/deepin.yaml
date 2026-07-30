@@ -1,0 +1,29 @@
+id: deepin
+
+name: Deepin
+
+status: experimental
+# NOTE: deepin-desktop-environment and lightdm-deepin-greeter come from the
+# deepin-community third-party repo, not official Arch repos, and have had
+# repeated breakage history. Same packages.x86_64/mkarchiso limitation as
+# Pantheon (Task 14) applies — not buildable via this pipeline alone unless
+# the deepin-community repo is added to pacman.conf ahead of time.
+
+packages:
+  - deepin-desktop-environment
+  - lightdm-deepin-greeter
+  - lightdm
+
+display_manager:
+  package: lightdm
+  service: lightdm
+
+session: deepin
+
+defaults:
+  terminal: deepin-terminal
+  file_manager: dde-file-manager
+  editor: featherpad
+  screenshot: deepin-screenshot
+
+branding_package: gnegnolios-branding-deepin

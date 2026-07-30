@@ -1,0 +1,22 @@
+name: gnegnolios-branding-deepin
+
+description: |
+  Deepin desktop branding for GnegnoliOS. Experimental: DDE packaging on
+  Arch relies on the third-party deepin-community repo.
+
+version: "0.1"
+
+enabled: true
+
+build: true
+
+desktop: deepin
+
+install:
+  iso: true
+  repository: true
+
+dependencies:
+  - gnegnolios-branding-common
+
+build_system: makepkg
