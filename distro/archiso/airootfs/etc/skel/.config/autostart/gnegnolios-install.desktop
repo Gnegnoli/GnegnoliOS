@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=GnegnoliOS Installer
+Exec=sh -c 'grep -q archiso /proc/cmdline && exec gnegnolios-install'
+X-KDE-autostart-phase=1
+NoDisplay=true

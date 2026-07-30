@@ -1,5 +1,6 @@
 post_install() {
-    plymouth-set-default-theme -R gnegnolios || true
+    plymouth-set-default-theme gnegnolios || true
+    mkinitcpio -P || true
 }
 
 post_upgrade() {
