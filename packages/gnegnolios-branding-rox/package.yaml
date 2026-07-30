@@ -1,0 +1,22 @@
+name: gnegnolios-branding-rox
+
+description: |
+  ROX Desktop branding for GnegnoliOS. Experimental: ROX is effectively
+  unmaintained upstream.
+
+version: "0.1"
+
+enabled: true
+
+build: true
+
+desktop: rox
+
+install:
+  iso: true
+  repository: true
+
+dependencies:
+  - gnegnolios-branding-common
+
+build_system: makepkg

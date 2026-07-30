@@ -1,0 +1,27 @@
+id: rox
+
+name: ROX Desktop
+
+status: experimental
+# NOTE: ROX Desktop is effectively unmaintained upstream (last release
+# years ago); rox-filer/rox-session are AUR-only and may not build against
+# current library versions. Same AUR/mkarchiso limitation as Task 14-16.
+
+packages:
+  - rox-filer
+  - rox-session
+  - lightdm
+
+display_manager:
+  package: lightdm
+  service: lightdm
+
+session: rox
+
+defaults:
+  terminal: xterm
+  file_manager: rox-filer
+  editor: featherpad
+  screenshot: scrot
+
+branding_package: gnegnolios-branding-rox

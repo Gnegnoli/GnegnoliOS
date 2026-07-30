@@ -239,6 +239,7 @@ categories:
       - qterminal
       - deepin-terminal
       - cosmic-term
+      - xterm
 
   - id: editors
     name: Editor
@@ -864,6 +865,10 @@ package_groups:
       packages:
         pacman:
           - cosmic-term
+    xterm:
+      packages:
+        pacman:
+          - xterm
 
   editors:
     kate:
