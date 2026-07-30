@@ -4,7 +4,7 @@ pkgrel=1
 pkgdesc="Gnegnoli Control Center desktop application"
 arch=('any')
 license=('custom')
-depends=('python' 'python-pyqt6' 'python-psutil' 'qt6-svg' 'pacman-contrib' 'polkit' 'gnegnolios-branding')
+depends=('python' 'python-pyqt6' 'python-psutil' 'qt6-svg' 'pacman-contrib' 'polkit' 'gnegnolios-branding-common')
 
 source=()
 sha256sums=()

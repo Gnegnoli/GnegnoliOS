@@ -16,6 +16,6 @@ install:
   repository: true
 
 dependencies:
-  - gnegnolios-branding
+  - gnegnolios-branding-common
 
 build_system: makepkg

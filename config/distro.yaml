@@ -72,8 +72,18 @@ desktop:
   available:
     - kde
     - gnome
+    - xfce
+    - cinnamon
+    - mate
+    - lxqt
+    - budgie
     - hyprland
-    - unity
+    - pantheon
+    - deepin
+    - cosmic
+    - rox
+    - lxde
+    - trinity
 
 filesystem:
   default: btrfs

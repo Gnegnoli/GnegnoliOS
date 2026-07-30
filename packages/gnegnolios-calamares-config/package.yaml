@@ -15,7 +15,7 @@ install:
 
 dependencies:
   - gnegnolios-release
-  - gnegnolios-branding
+  - gnegnolios-branding-common
   - gnegnolios-installer-config
 
 build_system: makepkg
