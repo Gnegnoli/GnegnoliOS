@@ -18,3 +18,15 @@ prepare_workspace() {
     cp -a "$PROJECT_ROOT/distro/archiso/." "$WORKSPACE"
 
 }
+
+write_display_manager_symlink() {
+
+    local dm_dir="$WORKSPACE/airootfs/etc/systemd/system"
+
+    mkdir -p "$dm_dir"
+
+    ln -sf "/usr/lib/systemd/system/${DESKTOP_DISPLAY_MANAGER_SERVICE}.service" \
+        "$dm_dir/display-manager.service"
+
+    echo "Live ISO display manager: ${DESKTOP_DISPLAY_MANAGER_SERVICE}"
+}
