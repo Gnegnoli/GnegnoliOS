@@ -1,0 +1,24 @@
+id: lxqt
+
+name: LXQt
+
+status: stable
+
+packages:
+  - lxqt
+  - breeze-icons
+  - sddm
+
+display_manager:
+  package: sddm
+  service: sddm
+
+session: lxqt
+
+defaults:
+  terminal: qterminal
+  file_manager: pcmanfm-qt
+  editor: featherpad
+  screenshot: screengrab
+
+branding_package: gnegnolios-branding-lxqt

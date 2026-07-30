@@ -1,0 +1,14 @@
+pkgname=gnegnolios-branding-lxqt
+pkgver=0.1
+pkgrel=1
+pkgdesc="LXQt-native branding assets for GnegnoliOS"
+arch=('any')
+license=('custom')
+depends=('gnegnolios-branding-common' 'lxqt-config' 'qt5ct')
+
+source=()
+sha256sums=()
+
+package() {
+    cp -a "$startdir/rootfs/." "$pkgdir"
+}

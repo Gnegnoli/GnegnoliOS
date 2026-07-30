@@ -1,0 +1,21 @@
+name: gnegnolios-branding-lxqt
+
+description: |
+  LXQt desktop branding (lxqt.conf, qt5ct) for GnegnoliOS.
+
+version: "0.1"
+
+enabled: true
+
+build: true
+
+desktop: lxqt
+
+install:
+  iso: true
+  repository: true
+
+dependencies:
+  - gnegnolios-branding-common
+
+build_system: makepkg
