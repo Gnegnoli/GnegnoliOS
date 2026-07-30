@@ -1,0 +1,24 @@
+id: gnome
+
+name: GNOME
+
+status: stable
+
+packages:
+  - gnome
+  - gnome-extra
+  - gdm
+
+display_manager:
+  package: gdm
+  service: gdm
+
+session: gnome
+
+defaults:
+  terminal: gnome-terminal
+  file_manager: nautilus
+  editor: gnome-text-editor
+  screenshot: gnome-screenshot
+
+branding_package: gnegnolios-branding-gnome

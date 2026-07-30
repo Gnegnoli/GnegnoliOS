@@ -1,0 +1,21 @@
+name: gnegnolios-branding-gnome
+
+description: |
+  GNOME desktop branding (dconf overrides) for GnegnoliOS.
+
+version: "0.1"
+
+enabled: true
+
+build: true
+
+desktop: gnome
+
+install:
+  iso: true
+  repository: true
+
+dependencies:
+  - gnegnolios-branding-common
+
+build_system: makepkg

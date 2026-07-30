@@ -1,0 +1,16 @@
+pkgname=gnegnolios-branding-gnome
+pkgver=0.1
+pkgrel=1
+pkgdesc="GNOME-native branding assets for GnegnoliOS"
+arch=('any')
+license=('custom')
+depends=('gnegnolios-branding-common' 'dconf')
+
+install=gnegnolios-branding-gnome.install
+
+source=()
+sha256sums=()
+
+package() {
+    cp -a "$startdir/rootfs/." "$pkgdir"
+}

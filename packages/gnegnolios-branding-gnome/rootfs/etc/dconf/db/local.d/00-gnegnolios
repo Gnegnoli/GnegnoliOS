@@ -1,0 +1,19 @@
+[org/gnome/desktop/interface]
+color-scheme='prefer-dark'
+gtk-theme='GnegnoliOS'
+icon-theme='GnegnoliOS'
+cursor-theme='GnegnoliOS'
+font-name='Inter 11'
+document-font-name='Inter 11'
+monospace-font-name='JetBrains Mono 11'
+
+[org/gnome/desktop/background]
+picture-uri='file:///usr/share/wallpapers/GnegnoliOSGenesis/contents/images/1536x1024.png'
+picture-uri-dark='file:///usr/share/wallpapers/GnegnoliOSGenesis/contents/images/1536x1024.png'
+primary-color='#0D0D0D'
+
+[org/gnome/desktop/wm/preferences]
+theme='GnegnoliOS'
+
+[org/gnome/shell]
+favorite-apps=['org.gnome.Nautilus.desktop', 'firefox.desktop']
