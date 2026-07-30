@@ -27,6 +27,7 @@ build_iso() {
         -w "$CACHE_DIR" \
         -o "$OUTPUT_DIR" \
         "$WORKSPACE" 2>&1 | tee "$log_file"
+    local mkarchiso_status="${PIPESTATUS[0]}"
 
     if grep -q "ERROR: Hook '.*' cannot be found" "$log_file"; then
         echo
@@ -36,6 +37,12 @@ build_iso() {
         return 1
     fi
     rm -f "$log_file"
+
+    if [ "$mkarchiso_status" -ne 0 ]; then
+        echo
+        echo "ERROR: mkarchiso exited with status $mkarchiso_status. See log above."
+        return 1
+    fi
 
     compgen -G "$OUTPUT_DIR/gnegnolios-*.iso" >/dev/null
 }
