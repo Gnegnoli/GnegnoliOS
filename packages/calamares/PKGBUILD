@@ -36,7 +36,6 @@ build() {
     initramfs
     initramfscfg
     interactiveterminal
-    packagechooser
     packagechooserq
     services-openrc
   )

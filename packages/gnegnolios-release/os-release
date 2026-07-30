@@ -7,3 +7,4 @@ VERSION_ID="0.1-alpha"
 HOME_URL="https://gnegnolios.org"
 SUPPORT_URL="https://github.com/GnegnoliOS"
 BUG_REPORT_URL="https://github.com/GnegnoliOS"
+LOGO=gnegnolios-start

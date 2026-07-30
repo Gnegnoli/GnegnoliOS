@@ -21,4 +21,6 @@ package() {
 
     cp -a "$startdir/rootfs/." "$pkgdir"
 
+    chmod 755 "$pkgdir/usr/bin/gnegnolios-install"
+
 }

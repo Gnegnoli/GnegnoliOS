@@ -1,7 +1,10 @@
 [KDE]
-LookAndFeelPackage=org.kde.breezedark.desktop
+LookAndFeelPackage=com.gnegnolios.looknfeel
 widgetStyle=Breeze
 SingleClick=false
+
+[KSplash]
+Theme=com.gnegnolios.looknfeel
 
 [General]
 ColorScheme=GnegnoliOSDark

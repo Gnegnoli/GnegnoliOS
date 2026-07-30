@@ -6,8 +6,9 @@ xdata = pkgtype=pkg
 pkgver = 0.1-1
 pkgdesc = Branding assets for GnegnoliOS
 url = 
-builddate = 1785222677
+builddate = 1785407627
 packager = Unknown Packager
-size = 7050140
+size = 30396428
 arch = any
 license = custom
+depend = plymouth

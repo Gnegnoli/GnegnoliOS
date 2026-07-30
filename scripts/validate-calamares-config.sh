@@ -16,7 +16,7 @@ import yaml
 calamares_root = pathlib.Path(sys.argv[1])
 errors = []
 
-for settings_name in ("settings.conf", "settings-express.conf", "settings-guided.conf", "settings-advanced.conf"):
+for settings_name in ("settings.conf", "express/settings.conf", "guided/settings.conf", "advanced/settings.conf"):
     settings_path = calamares_root / settings_name
 
     if not settings_path.exists():

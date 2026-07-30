@@ -28,13 +28,15 @@ if [ -z "$mode" ]; then
 fi
 
 case "$mode" in
-    Express)  conf=/etc/calamares/settings-express.conf ;;
-    Guided)   conf=/etc/calamares/settings-guided.conf ;;
-    Advanced) conf=/etc/calamares/settings-advanced.conf ;;
+    Express)  conf=/etc/calamares/express ;;
+    Guided)   conf=/etc/calamares/guided ;;
+    Advanced) conf=/etc/calamares/advanced ;;
     *)
         printf '%s\n' "Unknown mode: $mode" >&2
         exit 1
         ;;
 esac
 
-exec pkexec calamares -c "$conf" "$@"
+exec pkexec env DISPLAY="$DISPLAY" XAUTHORITY="$XAUTHORITY" \
+    WAYLAND_DISPLAY="$WAYLAND_DISPLAY" XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" \
+    calamares -c "$conf" "$@"

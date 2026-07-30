@@ -8,6 +8,7 @@ CALAMARES_REL="packages/gnegnolios-calamares-config/rootfs/etc/calamares"
 generate_calamares_config() {
 
     mkdir -p "$PROJECT_ROOT/$CALAMARES_REL/modules"
+    mkdir -p "$PROJECT_ROOT/$CALAMARES_REL/express" "$PROJECT_ROOT/$CALAMARES_REL/guided" "$PROJECT_ROOT/$CALAMARES_REL/advanced"
 
     python3 - "$PROJECT_ROOT" "$CALAMARES_REL" <<'PY'
 import pathlib
@@ -318,7 +319,7 @@ settings_express = {
     "disable-cancel-during-exec": True,
     "hide-back-and-next-during-exec": True,
 }
-(calamares_root / "settings-express.conf").write_text(
+(calamares_root / "express" / "settings.conf").write_text(
     "---\n" + yaml.safe_dump(settings_express, sort_keys=False)
 )
 
@@ -377,7 +378,7 @@ settings_guided = build_settings(
     extra_show=[],
     extra_exec_before_packages=[],
 )
-(calamares_root / "settings-guided.conf").write_text(
+(calamares_root / "guided" / "settings.conf").write_text(
     "---\n" + yaml.safe_dump(settings_guided, sort_keys=False)
 )
 
@@ -394,7 +395,7 @@ settings_advanced = build_settings(
     partition_config="partition-advanced.conf",
     bootloader_config="bootloader-advanced.conf",
 )
-(calamares_root / "settings-advanced.conf").write_text(
+(calamares_root / "advanced" / "settings.conf").write_text(
     "---\n" + yaml.safe_dump(settings_advanced, sort_keys=False)
 )
 
@@ -406,7 +407,7 @@ settings_advanced = build_settings(
     "---\n" + yaml.safe_dump(settings_guided, sort_keys=False)
 )
 
-print("Generated settings-express.conf, settings-guided.conf, settings-advanced.conf, settings.conf")
+print("Generated express/settings.conf, guided/settings.conf, advanced/settings.conf, settings.conf")
 PY
 }
 

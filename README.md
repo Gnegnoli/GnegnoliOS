@@ -165,6 +165,13 @@ qemu-system-x86_64 -enable-kvm -m 4096 -cdrom build/output/gnegnolios-*.iso
 
 Or flash it to a USB drive with `dd`/Ventoy/Rufus and boot real hardware.
 
+Default live session credentials (both `root` and the `live` user):
+
+| User | Password |
+|---|---|
+| `live` | `live` |
+| `root` | `live` |
+
 ## TODO / planned features
 
 Rough backlog, not yet scheduled — mainly for the Control Center app
