@@ -15,6 +15,7 @@ build_package() {
         cd "$package_dir"
 
         rm -rf pkg src
+        rm -f ./*.pkg.tar*
 
         makepkg -fs --noconfirm
     )
