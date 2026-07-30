@@ -1,0 +1,16 @@
+pkgname=gnegnolios-branding-cinnamon
+pkgver=0.1
+pkgrel=1
+pkgdesc="Cinnamon-native branding assets for GnegnoliOS"
+arch=('any')
+license=('custom')
+depends=('gnegnolios-branding-common' 'dconf')
+
+install=gnegnolios-branding-cinnamon.install
+
+source=()
+sha256sums=()
+
+package() {
+    cp -a "$startdir/rootfs/." "$pkgdir"
+}

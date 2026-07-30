@@ -1,0 +1,25 @@
+id: cinnamon
+
+name: Cinnamon
+
+status: stable
+
+packages:
+  - cinnamon
+  - cinnamon-translations
+  - lightdm
+  - lightdm-gtk-greeter
+
+display_manager:
+  package: lightdm
+  service: lightdm
+
+session: cinnamon
+
+defaults:
+  terminal: gnome-terminal
+  file_manager: nemo
+  editor: gnome-text-editor
+  screenshot: gnome-screenshot
+
+branding_package: gnegnolios-branding-cinnamon

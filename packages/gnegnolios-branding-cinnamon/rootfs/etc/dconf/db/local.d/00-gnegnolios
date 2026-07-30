@@ -1,0 +1,15 @@
+[org/cinnamon/desktop/interface]
+gtk-theme='GnegnoliOS'
+icon-theme='GnegnoliOS'
+cursor-theme='GnegnoliOS'
+font-name='Inter 11'
+
+[org/cinnamon/desktop/background]
+picture-uri='file:///usr/share/wallpapers/GnegnoliOSGenesis/contents/images/1536x1024.png'
+primary-color='#0D0D0D'
+
+[org/cinnamon/theme]
+name='GnegnoliOS'
+
+[org/cinnamon/desktop/wm/preferences]
+theme='GnegnoliOS'
