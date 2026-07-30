@@ -1,0 +1,5 @@
+(
+    background: (red: 0.05, green: 0.05, blue: 0.05, alpha: 1.0),
+    accent: (red: 0.478, green: 0.059, blue: 0.086, alpha: 1.0),
+    text: (red: 0.929, green: 0.929, blue: 0.929, alpha: 1.0),
+)

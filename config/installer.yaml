@@ -238,6 +238,7 @@ categories:
       - mate-terminal
       - qterminal
       - deepin-terminal
+      - cosmic-term
 
   - id: editors
     name: Editor
@@ -252,6 +253,7 @@ categories:
       - featherpad
       - mousepad
       - pantheon-text-editor
+      - cosmic-edit
 
   - id: themes
     name: Theme
@@ -858,6 +860,10 @@ package_groups:
       packages:
         pacman:
           - deepin-terminal
+    cosmic-term:
+      packages:
+        pacman:
+          - cosmic-term
 
   editors:
     kate:
@@ -896,6 +902,10 @@ package_groups:
       packages:
         pacman:
           - pantheon-text-editor
+    cosmic-edit:
+      packages:
+        pacman:
+          - cosmic-edit
 
   themes:
     gnegnolios-dark:

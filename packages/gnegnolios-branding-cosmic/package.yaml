@@ -1,0 +1,22 @@
+name: gnegnolios-branding-cosmic
+
+description: |
+  COSMIC desktop branding for GnegnoliOS. Experimental: COSMIC is still in
+  active development upstream, packages are frequently -git/beta.
+
+version: "0.1"
+
+enabled: true
+
+build: true
+
+desktop: cosmic
+
+install:
+  iso: true
+  repository: true
+
+dependencies:
+  - gnegnolios-branding-common
+
+build_system: makepkg

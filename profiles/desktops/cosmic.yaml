@@ -1,0 +1,26 @@
+id: cosmic
+
+name: COSMIC
+
+status: experimental
+# NOTE: cosmic-session/cosmic-greeter are AUR (often -git) packages; COSMIC
+# itself is still under active development with frequent breaking changes.
+# Same packages.x86_64/mkarchiso AUR limitation as Task 14/15 applies.
+
+packages:
+  - cosmic-session
+  - cosmic-greeter
+
+display_manager:
+  package: cosmic-greeter
+  service: cosmic-greeter
+
+session: cosmic
+
+defaults:
+  terminal: cosmic-term
+  file_manager: cosmic-files
+  editor: cosmic-edit
+  screenshot: cosmic-screenshot
+
+branding_package: gnegnolios-branding-cosmic
