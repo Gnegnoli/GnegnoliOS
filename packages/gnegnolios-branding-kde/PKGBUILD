@@ -1,10 +1,12 @@
 pkgname=gnegnolios-branding-kde
 pkgver=0.1
-pkgrel=1
+pkgrel=2
 pkgdesc="KDE Plasma-native branding assets for GnegnoliOS"
 arch=('any')
 license=('custom')
 depends=('gnegnolios-branding-common' 'plasma-desktop')
+replaces=('gnegnolios-branding')
+conflicts=('gnegnolios-branding')
 
 source=()
 sha256sums=()

@@ -1,10 +1,12 @@
 pkgname=gnegnolios-branding-common
 pkgver=0.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Shared GnegnoliOS branding assets (fonts, wallpaper, plymouth, GTK defaults) used by every desktop edition"
 arch=('any')
 license=('custom')
 depends=('plymouth')
+replaces=('gnegnolios-branding')
+conflicts=('gnegnolios-branding')
 
 install=gnegnolios-branding-common.install
 
