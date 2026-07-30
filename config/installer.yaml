@@ -233,6 +233,10 @@ categories:
       - kitty
       - alacritty
       - ghostty
+      - gnome-terminal
+      - xfce4-terminal
+      - mate-terminal
+      - qterminal
 
   - id: editors
     name: Editor
@@ -242,6 +246,9 @@ categories:
       - code
       - neovim
       - emacs
+      - gnome-text-editor
+      - pluma
+      - featherpad
 
   - id: themes
     name: Theme
@@ -296,9 +303,9 @@ profiles:
     packages:
       pacman:
         - firefox
-        - dolphin
+        - __FILE_MANAGER__
         - ark
-        - spectacle
+        - __SCREENSHOT__
         - partitionmanager
         - power-profiles-daemon
 
@@ -828,6 +835,22 @@ package_groups:
       packages:
         pacman:
           - ghostty
+    gnome-terminal:
+      packages:
+        pacman:
+          - gnome-terminal
+    xfce4-terminal:
+      packages:
+        pacman:
+          - xfce4-terminal
+    mate-terminal:
+      packages:
+        pacman:
+          - mate-terminal
+    qterminal:
+      packages:
+        pacman:
+          - qterminal
 
   editors:
     kate:
@@ -846,6 +869,18 @@ package_groups:
       packages:
         pacman:
           - emacs
+    gnome-text-editor:
+      packages:
+        pacman:
+          - gnome-text-editor
+    pluma:
+      packages:
+        pacman:
+          - pluma
+    featherpad:
+      packages:
+        pacman:
+          - featherpad
 
   themes:
     gnegnolios-dark:

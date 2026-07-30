@@ -20,6 +20,35 @@ root = pathlib.Path(sys.argv[1])
 calamares_root = root / sys.argv[2]
 catalog = yaml.safe_load((root / "config/installer.yaml").read_text())
 
+import os
+
+desktop_id = os.environ.get("GNEGNOLIOS_DESKTOP", "kde")
+desktop_profile_path = root / "profiles" / "desktops" / f"{desktop_id}.yaml"
+desktop_profile = yaml.safe_load(desktop_profile_path.read_text()) or {}
+desktop_defaults = desktop_profile.get("defaults", {})
+
+catalog.setdefault("defaults", {})
+catalog["defaults"]["terminal"] = desktop_defaults["terminal"]
+catalog["defaults"]["editor"] = desktop_defaults["editor"]
+
+TOKEN_SUBSTITUTIONS = {
+    "__FILE_MANAGER__": desktop_defaults["file_manager"],
+    "__SCREENSHOT__": desktop_defaults["screenshot"],
+}
+
+
+def substitute_tokens(value):
+    if isinstance(value, str):
+        return TOKEN_SUBSTITUTIONS.get(value, value)
+    if isinstance(value, list):
+        return [substitute_tokens(item) for item in value]
+    if isinstance(value, dict):
+        return {key: substitute_tokens(item) for key, item in value.items()}
+    return value
+
+
+catalog["profiles"] = substitute_tokens(catalog.get("profiles", {}))
+
 groups = catalog.get("package_groups", {})
 profiles = catalog.get("profiles", {})
 

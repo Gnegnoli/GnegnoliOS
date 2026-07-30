@@ -116,6 +116,19 @@ if available:
                     )
 
 
+for profile_file in sorted((root / "profiles/desktops").glob("*.yaml")):
+    desktop = yaml.safe_load(profile_file.read_text()) or {}
+    desktop_defaults = desktop.get("defaults", {})
+
+    terminal_default = desktop_defaults.get("terminal")
+    if terminal_default and terminal_default not in groups.get("terminals", {}):
+        errors.append(f"{profile_file.name}: defaults.terminal '{terminal_default}' is not a terminals package_group option")
+
+    editor_default = desktop_defaults.get("editor")
+    if editor_default and editor_default not in groups.get("editors", {}):
+        errors.append(f"{profile_file.name}: defaults.editor '{editor_default}' is not an editors package_group option")
+
+
 if errors:
     print("\n".join(errors))
     sys.exit(1)
