@@ -1,0 +1,16 @@
+pkgname=gnegnolios-branding-budgie
+pkgver=0.1
+pkgrel=1
+pkgdesc="Budgie-native branding assets for GnegnoliOS"
+arch=('any')
+license=('custom')
+depends=('gnegnolios-branding-common' 'dconf')
+
+install=gnegnolios-branding-budgie.install
+
+source=()
+sha256sums=()
+
+package() {
+    cp -a "$startdir/rootfs/." "$pkgdir"
+}
