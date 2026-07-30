@@ -22,15 +22,19 @@ build_iso() {
     mkdir -p "$CACHE_DIR"
 
     local log_file="$LOG_DIR/mkarchiso.log"
+    local mkarchiso_status
 
     echo -n "Running mkarchiso... "
 
-    sudo env LC_ALL=C mkarchiso \
+    if sudo env LC_ALL=C mkarchiso \
         -v \
         -w "$CACHE_DIR" \
         -o "$OUTPUT_DIR" \
-        "$WORKSPACE" >"$log_file" 2>&1
-    local mkarchiso_status=$?
+        "$WORKSPACE" >"$log_file" 2>&1; then
+        mkarchiso_status=0
+    else
+        mkarchiso_status=$?
+    fi
 
     if grep -q "ERROR: Hook '.*' cannot be found" "$log_file"; then
         echo "FAILED"

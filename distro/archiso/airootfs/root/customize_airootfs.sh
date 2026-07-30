@@ -6,7 +6,6 @@ echo "root:live" | chpasswd
 echo "live:live" | chpasswd
 
 systemctl enable NetworkManager
-systemctl enable sddm
 systemctl enable cups
 systemctl enable docker
 systemctl enable bluetooth
