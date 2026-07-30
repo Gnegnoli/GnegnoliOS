@@ -1,0 +1,16 @@
+pkgname=gnegnolios-branding-common
+pkgver=0.1
+pkgrel=1
+pkgdesc="Shared GnegnoliOS branding assets (fonts, wallpaper, plymouth, GTK defaults) used by every desktop edition"
+arch=('any')
+license=('custom')
+depends=('plymouth')
+
+install=gnegnolios-branding-common.install
+
+source=()
+sha256sums=()
+
+package() {
+    cp -a "$startdir/rootfs/." "$pkgdir"
+}

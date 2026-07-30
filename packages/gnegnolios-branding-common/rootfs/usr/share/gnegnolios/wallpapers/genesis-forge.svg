@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 7680 4320" role="img" aria-labelledby="title desc">
+  <title id="title">Genesis Forge</title>
+  <desc id="desc">Dark cathedral geometry in forged steel and volcanic stone with subtle crimson embers.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="4320" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#060606"/>
+      <stop offset="0.55" stop-color="#0D0D0D"/>
+      <stop offset="1" stop-color="#1B1B1B"/>
+    </linearGradient>
+    <radialGradient id="crimson" cx="3840" cy="3560" r="2100" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7A0F16" stop-opacity=".55"/>
+      <stop offset=".36" stop-color="#7A0F16" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#7A0F16" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="steel" x1="0" y1="840" x2="7680" y2="3880" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1B1B1B"/>
+      <stop offset=".5" stop-color="#4D4D4D"/>
+      <stop offset="1" stop-color="#151515"/>
+    </linearGradient>
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="3" seed="18"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 .08"/>
+      </feComponentTransfer>
+    </filter>
+    <g id="spire">
+      <path fill="#111" stroke="#323232" stroke-width="18" d="M0 2100 280 1140l280 960v1240H0V2100Z"/>
+      <path fill="none" stroke="#4D4D4D" stroke-width="10" d="M280 1375v1870M128 2300h304M92 2680h376"/>
+      <path fill="#0D0D0D" stroke="#323232" stroke-width="12" d="M160 3220v-470c0-160 50-285 120-355 70 70 120 195 120 355v470H160Z"/>
+    </g>
+  </defs>
+  <rect width="7680" height="4320" fill="url(#sky)"/>
+  <rect width="7680" height="4320" fill="url(#crimson)"/>
+  <path fill="#080808" d="M0 3410c860-210 1370-300 2100-260 850 47 1180 285 1975 180 855-113 1294-421 2338-300 463 54 853 178 1267 330v960H0v-910Z"/>
+  <path fill="url(#steel)" opacity=".72" d="M560 3380 3840 880l3280 2500v940H560v-940Z"/>
+  <path fill="#0D0D0D" d="M920 3420 3840 1190l2920 2230v900H920v-900Z"/>
+  <path fill="none" stroke="#323232" stroke-width="28" d="M920 3420 3840 1190l2920 2230"/>
+  <path fill="none" stroke="#A8A8A8" stroke-opacity=".22" stroke-width="10" d="M1240 3440 3840 1450l2600 1990"/>
+  <path fill="#111" stroke="#323232" stroke-width="22" d="M2870 4320V2890c0-520 320-980 970-1290 650 310 970 770 970 1290v1430h-480V2950c0-305-150-590-490-800-340 210-490 495-490 800v1370h-480Z"/>
+  <path fill="#070707" stroke="#4D4D4D" stroke-opacity=".7" stroke-width="16" d="M3370 4320V3020c0-260 140-506 470-720 330 214 470 460 470 720v1300h-940Z"/>
+  <use href="#spire" x="820" y="380"/>
+  <use href="#spire" x="6280" y="380"/>
+  <use href="#spire" x="1580" y="650" transform="scale(.82)"/>
+  <use href="#spire" x="6710" y="650" transform="scale(.82)"/>
+  <path fill="none" stroke="#7A0F16" stroke-opacity=".35" stroke-width="12" d="M3840 1720v2600"/>
+  <g fill="#7A0F16" opacity=".42">
+    <circle cx="1260" cy="3835" r="9"/>
+    <circle cx="1915" cy="3650" r="7"/>
+    <circle cx="5300" cy="3740" r="10"/>
+    <circle cx="6080" cy="3930" r="6"/>
+    <circle cx="4135" cy="3560" r="8"/>
+    <circle cx="3505" cy="3750" r="5"/>
+  </g>
+  <rect width="7680" height="4320" filter="url(#grain)"/>
+  <rect width="7680" height="4320" fill="#000" opacity=".18"/>
+</svg>

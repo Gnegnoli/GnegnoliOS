@@ -1,0 +1,22 @@
+name: gnegnolios-branding-kde
+
+description: |
+  KDE Plasma branding package for GnegnoliOS.
+
+version: "0.1"
+
+enabled: true
+
+build: true
+
+desktop: kde
+
+install:
+  iso: true
+  repository: true
+
+dependencies:
+  - gnegnolios-release
+  - gnegnolios-branding-common
+
+build_system: makepkg

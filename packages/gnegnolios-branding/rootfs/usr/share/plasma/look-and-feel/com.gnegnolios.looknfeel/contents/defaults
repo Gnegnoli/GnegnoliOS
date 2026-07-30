@@ -1,8 +1,0 @@
-[Wallpaper][org.kde.image][General]
-Image=/usr/share/wallpapers/GnegnoliOSGenesis/contents/images/1536x1024.png
-
-[KSplash]
-Theme=com.gnegnolios.looknfeel
-
-[kdeglobals][KDE]
-LookAndFeelPackage=com.gnegnolios.looknfeel

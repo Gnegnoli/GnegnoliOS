@@ -852,17 +852,26 @@ package_groups:
       name: GnegnoliOS Dark
       packages:
         pacman:
-          - gnegnolios-branding
+          - gnegnolios-branding-common
+          - gnegnolios-branding-kde
+          - gnegnolios-icon-theme
+          - gnegnolios-cursor-theme
     gnegnolios-crimson:
       name: GnegnoliOS Crimson
       packages:
         pacman:
-          - gnegnolios-branding
+          - gnegnolios-branding-common
+          - gnegnolios-branding-kde
+          - gnegnolios-icon-theme
+          - gnegnolios-cursor-theme
     gnegnolios-steel:
       name: GnegnoliOS Steel
       packages:
         pacman:
-          - gnegnolios-branding
+          - gnegnolios-branding-common
+          - gnegnolios-branding-kde
+          - gnegnolios-icon-theme
+          - gnegnolios-cursor-theme
 
   optional_services:
     bluetooth:

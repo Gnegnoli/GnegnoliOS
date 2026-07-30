@@ -1,0 +1,20 @@
+name: gnegnolios-branding-common
+
+description: |
+  Shared branding assets for GnegnoliOS, installed on every desktop edition
+  regardless of which desktop environment is chosen.
+
+version: "0.1"
+
+enabled: true
+
+build: true
+
+install:
+  iso: true
+  repository: true
+
+dependencies:
+  - gnegnolios-release
+
+build_system: makepkg

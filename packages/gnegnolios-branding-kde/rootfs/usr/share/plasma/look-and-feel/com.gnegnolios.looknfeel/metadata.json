@@ -1,0 +1,14 @@
+{
+  "KPlugin": {
+    "Id": "com.gnegnolios.looknfeel",
+    "Name": "GnegnoliOS",
+    "Description": "GnegnoliOS dark look and feel: default wallpaper and login splash.",
+    "Authors": [
+      {
+        "Name": "GnegnoliOS"
+      }
+    ],
+    "License": "CC-BY-SA-4.0"
+  },
+  "KPackageStructure": "Plasma/LookAndFeel"
+}

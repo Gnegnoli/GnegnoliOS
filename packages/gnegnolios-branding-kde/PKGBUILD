@@ -1,0 +1,14 @@
+pkgname=gnegnolios-branding-kde
+pkgver=0.1
+pkgrel=1
+pkgdesc="KDE Plasma-native branding assets for GnegnoliOS"
+arch=('any')
+license=('custom')
+depends=('gnegnolios-branding-common' 'plasma-desktop')
+
+source=()
+sha256sums=()
+
+package() {
+    cp -a "$startdir/rootfs/." "$pkgdir"
+}
