@@ -1,0 +1,14 @@
+pkgname=gnegnolios-branding-xfce
+pkgver=0.1
+pkgrel=1
+pkgdesc="XFCE-native branding assets for GnegnoliOS"
+arch=('any')
+license=('custom')
+depends=('gnegnolios-branding-common' 'xfconf')
+
+source=()
+sha256sums=()
+
+package() {
+    cp -a "$startdir/rootfs/." "$pkgdir"
+}

@@ -249,6 +249,7 @@ categories:
       - gnome-text-editor
       - pluma
       - featherpad
+      - mousepad
 
   - id: themes
     name: Theme
@@ -881,6 +882,10 @@ package_groups:
       packages:
         pacman:
           - featherpad
+    mousepad:
+      packages:
+        pacman:
+          - mousepad
 
   themes:
     gnegnolios-dark:

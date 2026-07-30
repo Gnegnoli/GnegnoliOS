@@ -1,0 +1,25 @@
+id: xfce
+
+name: XFCE
+
+status: stable
+
+packages:
+  - xfce4
+  - xfce4-goodies
+  - lightdm
+  - lightdm-gtk-greeter
+
+display_manager:
+  package: lightdm
+  service: lightdm
+
+session: xfce
+
+defaults:
+  terminal: xfce4-terminal
+  file_manager: thunar
+  editor: mousepad
+  screenshot: xfce4-screenshooter
+
+branding_package: gnegnolios-branding-xfce
