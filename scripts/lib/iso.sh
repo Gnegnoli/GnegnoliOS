@@ -20,29 +20,40 @@ build_iso() {
     echo "Cleaning previous mkarchiso cache..."
     sudo rm -rf "$CACHE_DIR"
     mkdir -p "$CACHE_DIR"
-    local log_file
-    log_file="$(mktemp)"
-    sudo mkarchiso \
+
+    local log_file="$LOG_DIR/mkarchiso.log"
+
+    echo -n "Running mkarchiso... "
+
+    sudo env LC_ALL=C mkarchiso \
         -v \
         -w "$CACHE_DIR" \
         -o "$OUTPUT_DIR" \
-        "$WORKSPACE" 2>&1 | tee "$log_file"
-    local mkarchiso_status="${PIPESTATUS[0]}"
+        "$WORKSPACE" >"$log_file" 2>&1
+    local mkarchiso_status=$?
 
     if grep -q "ERROR: Hook '.*' cannot be found" "$log_file"; then
+        echo "FAILED"
         echo
         echo "ERROR: mkinitcpio could not find required hooks (missing archiso/mkinitcpio-archiso package?)."
-        echo "Refusing to ship a broken initramfs. See log above."
-        rm -f "$log_file"
+        echo "Refusing to ship a broken initramfs."
+        tail -n 50 "$log_file"
+        echo
+        echo "Full log: $log_file"
         return 1
     fi
-    rm -f "$log_file"
 
     if [ "$mkarchiso_status" -ne 0 ]; then
+        echo "FAILED"
         echo
-        echo "ERROR: mkarchiso exited with status $mkarchiso_status. See log above."
+        tail -n 50 "$log_file"
+        echo
+        echo "ERROR: mkarchiso exited with status $mkarchiso_status."
+        echo "Full log: $log_file"
         return 1
     fi
+
+    echo "OK"
 
     compgen -G "$OUTPUT_DIR/gnegnolios-*.iso" >/dev/null
 }

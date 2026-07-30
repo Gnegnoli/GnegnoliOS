@@ -3,6 +3,7 @@
 WORKSPACE="$PROJECT_ROOT/build/profile"
 CACHE_DIR="$PROJECT_ROOT/build/cache"
 OUTPUT_DIR="$PROJECT_ROOT/build/output"
+LOG_DIR="$PROJECT_ROOT/build/logs"
 LOCAL_REPO_NAME="gnegnolios-local"
 LOCAL_REPO_DIR="$PROJECT_ROOT/build/repository"
 
@@ -14,6 +15,7 @@ prepare_workspace() {
     rm -rf "$WORKSPACE"
 
     mkdir -p "$WORKSPACE"
+    mkdir -p "$LOG_DIR"
 
     cp -a "$PROJECT_ROOT/distro/archiso/." "$WORKSPACE"
 

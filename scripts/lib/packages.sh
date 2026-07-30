@@ -4,23 +4,30 @@ build_package() {
 
     local package_dir="$1"
     local package_name
+    local log_file
 
     package_name=$(basename "$package_dir")
+    log_file="$LOG_DIR/pkg-${package_name}.log"
 
-    echo "-----------------------------------------"
-    echo "Building package: $package_name"
-    echo "-----------------------------------------"
+    echo -n "Building package: $package_name... "
 
-    (
+    if (
         cd "$package_dir"
 
         rm -rf pkg src
         rm -f ./*.pkg.tar*
 
-        makepkg -fs --noconfirm
-    )
-
-    echo
+        LC_ALL=C makepkg -fs --noconfirm
+    ) >"$log_file" 2>&1; then
+        echo "OK"
+    else
+        echo "FAILED"
+        echo
+        tail -n 50 "$log_file"
+        echo
+        echo "Full log: $log_file"
+        return 1
+    fi
 }
 
 prepare_local_repository() {
@@ -40,7 +47,7 @@ publish_package_to_local_repository() {
         [ -f "$package_file" ] || continue
 
         cp "$package_file" "$LOCAL_REPO_DIR/"
-        repo-add "$LOCAL_REPO_DIR/$LOCAL_REPO_NAME.db.tar.gz" \
+        LC_ALL=C repo-add "$LOCAL_REPO_DIR/$LOCAL_REPO_NAME.db.tar.gz" \
             "$LOCAL_REPO_DIR/$(basename "$package_file")" >/dev/null
 
         published=true
@@ -52,7 +59,7 @@ publish_package_to_local_repository() {
         exit 1
     fi
 
-    sudo pacman -U --noconfirm --needed "$package_dir"/*.pkg.tar* >/dev/null
+    sudo env LC_ALL=C pacman -U --noconfirm --needed "$package_dir"/*.pkg.tar* >/dev/null
 }
 
 configure_local_repository() {
