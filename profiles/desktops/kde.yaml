@@ -2,14 +2,23 @@ id: kde
 
 name: KDE Plasma
 
+status: stable
+
 packages:
   - plasma-meta
   - kde-applications-meta
   - sddm
 
-services:
-  - sddm
-
-display_manager: sddm
+display_manager:
+  package: sddm
+  service: sddm
 
 session: plasma
+
+defaults:
+  terminal: konsole
+  file_manager: dolphin
+  editor: kate
+  screenshot: spectacle
+
+branding_package: gnegnolios-branding-kde
