@@ -1,0 +1,14 @@
+[General]
+widgetStyle=plastik
+
+[Colors:Window]
+BackgroundNormal=13,13,13
+ForegroundNormal=237,237,237
+
+[Colors:Button]
+BackgroundNormal=27,27,27
+ForegroundNormal=237,237,237
+
+[Colors:Selection]
+BackgroundNormal=122,15,22
+ForegroundNormal=237,237,237

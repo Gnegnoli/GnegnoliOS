@@ -1,0 +1,26 @@
+id: trinity
+
+name: Trinity Desktop Environment
+
+status: experimental
+# NOTE: TDE is a KDE 3 fork maintained via its own unofficial repo/AUR,
+# not official Arch repos. Same AUR/mkarchiso limitation as Task 14-18,
+# plus TDE's own repo would need to be added to pacman.conf ahead of time.
+
+packages:
+  - trinity-desktop
+  - tdm
+
+display_manager:
+  package: tdm
+  service: tdm
+
+session: trinity
+
+defaults:
+  terminal: konsole-trinity
+  file_manager: konqueror-trinity
+  editor: kwrite-trinity
+  screenshot: ksnapshot-trinity
+
+branding_package: gnegnolios-branding-trinity

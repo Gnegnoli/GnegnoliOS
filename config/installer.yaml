@@ -240,6 +240,7 @@ categories:
       - deepin-terminal
       - cosmic-term
       - xterm
+      - konsole-trinity
 
   - id: editors
     name: Editor
@@ -256,6 +257,7 @@ categories:
       - mousepad
       - pantheon-text-editor
       - cosmic-edit
+      - kwrite-trinity
 
   - id: themes
     name: Theme
@@ -870,6 +872,10 @@ package_groups:
       packages:
         pacman:
           - xterm
+    konsole-trinity:
+      packages:
+        pacman:
+          - konsole-trinity
 
   editors:
     kate:
@@ -916,6 +922,10 @@ package_groups:
       packages:
         pacman:
           - cosmic-edit
+    kwrite-trinity:
+      packages:
+        pacman:
+          - kwrite-trinity
 
   themes:
     gnegnolios-dark:

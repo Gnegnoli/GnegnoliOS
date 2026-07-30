@@ -1,0 +1,22 @@
+name: gnegnolios-branding-trinity
+
+description: |
+  Trinity (TDE) desktop branding for GnegnoliOS. Experimental: TDE is a
+  KDE 3 fork distributed through its own unofficial repo, not official Arch.
+
+version: "0.1"
+
+enabled: true
+
+build: true
+
+desktop: trinity
+
+install:
+  iso: true
+  repository: true
+
+dependencies:
+  - gnegnolios-branding-common
+
+build_system: makepkg
