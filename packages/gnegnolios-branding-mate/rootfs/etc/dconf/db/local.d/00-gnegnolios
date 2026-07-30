@@ -1,0 +1,13 @@
+[org/mate/desktop/interface]
+gtk-theme='GnegnoliOS'
+icon-theme='GnegnoliOS'
+cursor-theme='GnegnoliOS'
+font-name='Inter 11'
+
+[org/mate/desktop/background]
+picture-filename='/usr/share/wallpapers/GnegnoliOSGenesis/contents/images/1536x1024.png'
+primary-color='#0D0D0D'
+
+[org/mate/marco/general]
+theme='GnegnoliOS'
+titlebar-font='Inter Bold 10'

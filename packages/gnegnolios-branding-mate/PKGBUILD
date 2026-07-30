@@ -1,0 +1,16 @@
+pkgname=gnegnolios-branding-mate
+pkgver=0.1
+pkgrel=1
+pkgdesc="MATE-native branding assets for GnegnoliOS"
+arch=('any')
+license=('custom')
+depends=('gnegnolios-branding-common' 'dconf')
+
+install=gnegnolios-branding-mate.install
+
+source=()
+sha256sums=()
+
+package() {
+    cp -a "$startdir/rootfs/." "$pkgdir"
+}

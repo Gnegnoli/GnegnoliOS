@@ -1,0 +1,25 @@
+id: mate
+
+name: MATE
+
+status: stable
+
+packages:
+  - mate
+  - mate-extra
+  - lightdm
+  - lightdm-gtk-greeter
+
+display_manager:
+  package: lightdm
+  service: lightdm
+
+session: mate
+
+defaults:
+  terminal: mate-terminal
+  file_manager: caja
+  editor: pluma
+  screenshot: mate-screenshot
+
+branding_package: gnegnolios-branding-mate
