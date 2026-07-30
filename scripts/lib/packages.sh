@@ -75,6 +75,7 @@ load_project_iso_packages() {
     local package_name
     local enabled
     local install_iso
+    local package_desktop
 
     for package_dir in "$PROJECT_ROOT"/packages/*; do
 
@@ -85,8 +86,13 @@ load_project_iso_packages() {
 
         enabled=$(yq -r '.enabled // false' "$manifest")
         install_iso=$(yq -r '.install.iso // false' "$manifest")
+        package_desktop=$(yq -r '.desktop // ""' "$manifest")
 
         if [ "$enabled" != "true" ] || [ "$install_iso" != "true" ]; then
+            continue
+        fi
+
+        if [ -n "$package_desktop" ] && [ "$package_desktop" != "null" ] && [ "$package_desktop" != "$BUILD_DESKTOP" ]; then
             continue
         fi
 
@@ -126,6 +132,7 @@ build_packages() {
 
         enabled=$(yq '.enabled' "$package_dir/package.yaml")
         build=$(yq '.build' "$package_dir/package.yaml")
+        package_desktop=$(yq -r '.desktop // ""' "$package_dir/package.yaml")
 
         if [ "$enabled" != "true" ]; then
             echo "Skipping $(basename "$package_dir"): disabled."
@@ -134,6 +141,11 @@ build_packages() {
 
         if [ "$build" != "true" ]; then
             echo "Skipping $(basename "$package_dir"): build disabled."
+            continue
+        fi
+
+        if [ -n "$package_desktop" ] && [ "$package_desktop" != "null" ] && [ "$package_desktop" != "$BUILD_DESKTOP" ]; then
+            echo "Skipping $(basename "$package_dir"): built for desktop '$package_desktop', not '$BUILD_DESKTOP'."
             continue
         fi
 
