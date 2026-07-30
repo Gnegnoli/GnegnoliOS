@@ -1,0 +1,26 @@
+id: hyprland
+
+name: Hyprland
+
+status: stable
+
+packages:
+  - hyprland
+  - waybar
+  - wofi
+  - kitty
+  - sddm
+
+display_manager:
+  package: sddm
+  service: sddm
+
+session: hyprland
+
+defaults:
+  terminal: kitty
+  file_manager: nautilus
+  editor: neovim
+  screenshot: grim
+
+branding_package: gnegnolios-branding-hyprland

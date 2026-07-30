@@ -1,0 +1,13 @@
+* {
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+}
+
+window#waybar {
+    background-color: #0D0D0D;
+    color: #EDEDED;
+}
+
+#workspaces button.active {
+    background-color: #7A0F16;
+}
