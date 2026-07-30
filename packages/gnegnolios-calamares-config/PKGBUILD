@@ -9,7 +9,7 @@ depends=(
 )
 optdepends=(
     'calamares: graphical installer runtime'
-    'gnegnolios-branding: shared GnegnoliOS artwork'
+    'gnegnolios-branding-common: shared GnegnoliOS artwork'
     'gnegnolios-installer-config: Smart Installer catalog and resolver'
 )
 
@@ -22,5 +22,15 @@ package() {
     cp -a "$startdir/rootfs/." "$pkgdir"
 
     chmod 755 "$pkgdir/usr/bin/gnegnolios-install"
+
+    # Calamares' -c/--config flag fully overrides its application data
+    # directory, so each mode dir must be self-contained: it needs its own
+    # branding/, modules/, and qml/ subdirectories, not just settings.conf.
+    local mode
+    for mode in guided express advanced; do
+        ln -s ../branding "$pkgdir/etc/calamares/$mode/branding"
+        ln -s ../modules "$pkgdir/etc/calamares/$mode/modules"
+        ln -s /usr/share/calamares/qml "$pkgdir/etc/calamares/$mode/qml"
+    done
 
 }
