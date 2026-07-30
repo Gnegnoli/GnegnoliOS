@@ -250,6 +250,7 @@ categories:
       - pluma
       - featherpad
       - mousepad
+      - pantheon-text-editor
 
   - id: themes
     name: Theme
@@ -886,6 +887,10 @@ package_groups:
       packages:
         pacman:
           - mousepad
+    pantheon-text-editor:
+      packages:
+        pacman:
+          - pantheon-text-editor
 
   themes:
     gnegnolios-dark:

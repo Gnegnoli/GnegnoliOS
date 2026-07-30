@@ -1,0 +1,29 @@
+id: pantheon
+
+name: Pantheon
+
+status: experimental
+# NOTE: pantheon-session and lightdm-pantheon-greeter are AUR-only and built
+# around elementary OS's own repos/patches. `packages.x86_64` (mkarchiso)
+# only resolves pacman/gnegnolios-local packages, not AUR — this profile is
+# NOT buildable into a bootable ISO through this pipeline without first
+# building these via an AUR helper into the gnegnolios-local repo by hand.
+
+packages:
+  - pantheon-session
+  - lightdm-pantheon-greeter
+  - lightdm
+
+display_manager:
+  package: lightdm
+  service: lightdm
+
+session: pantheon
+
+defaults:
+  terminal: gnome-terminal
+  file_manager: pantheon-files
+  editor: pantheon-text-editor
+  screenshot: gnome-screenshot
+
+branding_package: gnegnolios-branding-pantheon

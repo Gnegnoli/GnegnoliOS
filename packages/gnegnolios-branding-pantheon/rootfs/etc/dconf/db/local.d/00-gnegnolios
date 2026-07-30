@@ -1,0 +1,8 @@
+[org/gnome/desktop/interface]
+gtk-theme='GnegnoliOS'
+icon-theme='GnegnoliOS'
+cursor-theme='GnegnoliOS'
+font-name='Inter 11'
+
+[io/elementary/desktop/wingpanel]
+theme='GnegnoliOS'

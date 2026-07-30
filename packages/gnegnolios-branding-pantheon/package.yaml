@@ -1,0 +1,22 @@
+name: gnegnolios-branding-pantheon
+
+description: |
+  Pantheon desktop branding (dconf overrides) for GnegnoliOS. Experimental:
+  Pantheon's AUR packaging outside elementary OS is inconsistent.
+
+version: "0.1"
+
+enabled: true
+
+build: true
+
+desktop: pantheon
+
+install:
+  iso: true
+  repository: true
+
+dependencies:
+  - gnegnolios-branding-common
+
+build_system: makepkg
