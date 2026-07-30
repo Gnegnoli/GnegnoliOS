@@ -1,0 +1,22 @@
+name: gnegnolios-branding-lxde
+
+description: |
+  LXDE desktop branding for GnegnoliOS. Experimental: LXDE is deprecated
+  upstream in favor of LXQt.
+
+version: "0.1"
+
+enabled: true
+
+build: true
+
+desktop: lxde
+
+install:
+  iso: true
+  repository: true
+
+dependencies:
+  - gnegnolios-branding-common
+
+build_system: makepkg

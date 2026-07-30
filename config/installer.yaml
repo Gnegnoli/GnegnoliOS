@@ -252,6 +252,7 @@ categories:
       - gnome-text-editor
       - pluma
       - featherpad
+      - leafpad
       - mousepad
       - pantheon-text-editor
       - cosmic-edit
@@ -899,6 +900,10 @@ package_groups:
       packages:
         pacman:
           - featherpad
+    leafpad:
+      packages:
+        pacman:
+          - leafpad
     mousepad:
       packages:
         pacman:

@@ -1,0 +1,14 @@
+pkgname=gnegnolios-branding-lxde
+pkgver=0.1
+pkgrel=1
+pkgdesc="LXDE-native branding assets for GnegnoliOS (experimental)"
+arch=('any')
+license=('custom')
+depends=('gnegnolios-branding-common')
+
+source=()
+sha256sums=()
+
+package() {
+    cp -a "$startdir/rootfs/." "$pkgdir"
+}

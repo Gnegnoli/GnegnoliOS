@@ -1,0 +1,26 @@
+id: lxde
+
+name: LXDE
+
+status: experimental
+# NOTE: LXDE upstream considers itself superseded by LXQt; its Arch
+# packages are AUR-only and no longer actively maintained. Same
+# AUR/mkarchiso limitation as Task 14-17.
+
+packages:
+  - lxde
+  - lxdm
+
+display_manager:
+  package: lxdm
+  service: lxdm
+
+session: LXDE
+
+defaults:
+  terminal: xterm
+  file_manager: pcmanfm
+  editor: leafpad
+  screenshot: scrot
+
+branding_package: gnegnolios-branding-lxde
