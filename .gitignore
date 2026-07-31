@@ -21,8 +21,11 @@ packages/gnegnolios-calamares-config/rootfs/etc/calamares/settings-express.conf
 packages/gnegnolios-calamares-config/rootfs/etc/calamares/settings-guided.conf
 packages/gnegnolios-calamares-config/rootfs/etc/calamares/settings-advanced.conf
 
-# Source design assets (already copied into packages/gnegnolios-branding)
-imgs/
+# Source design assets — only README-referenced images are tracked
+imgs/*
+!imgs/logo.png
+!imgs/login.png
+!imgs/wallpaper.png
 
 # Logs
 *.log

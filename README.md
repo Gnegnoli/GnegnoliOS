@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="packages/gnegnolios-branding/rootfs/usr/share/gnegnolios/logos/gnegnolios-mark.png" width="140" alt="GnegnoliOS mark" />
+<img src="imgs/logo.png" width="140" alt="GnegnoliOS mark" />
 
 # GnegnoliOS
 
@@ -9,7 +9,7 @@
 **A premium Arch Linux distribution, built for professionals — not another generic Arch derivative.**
 
 [![Base](https://img.shields.io/badge/base-Arch%20Linux-1793D1?style=for-the-badge&logo=archlinux&logoColor=white)](https://archlinux.org)
-[![Desktop](https://img.shields.io/badge/desktop-KDE%20Plasma-1D99F3?style=for-the-badge&logo=kde&logoColor=white)](https://kde.org)
+[![Desktop](https://img.shields.io/badge/desktop-14%20environments-1D99F3?style=for-the-badge)](#desktop-environments)
 [![Filesystem](https://img.shields.io/badge/filesystem-btrfs%20%2B%20snapper-7A0F16?style=for-the-badge)](#)
 [![Status](https://img.shields.io/badge/status-alpha%200.1-0D0D0D?style=for-the-badge)](#)
 [![License](https://img.shields.io/badge/license-custom-323232?style=for-the-badge)](#)
@@ -19,7 +19,7 @@
 <br/>
 
 <div align="center">
-<img src="packages/gnegnolios-branding/rootfs/usr/share/wallpapers/GnegnoliOSGenesis/contents/images/1536x1024.png" width="100%" alt="GnegnoliOS Genesis wallpaper" />
+<img src="imgs/wallpaper.png" width="100%" alt="GnegnoliOS Genesis wallpaper" />
 <sub>Default wallpaper — <b>Genesis</b></sub>
 </div>
 
@@ -54,9 +54,9 @@ This isn't a remaster with a different wallpaper. It's a system with **its own i
 |---|---|
 | Base | Arch Linux |
 | Package manager | `pacman` + `yay` (AUR) |
-| Kernel | `linux`, `linux-lts` |
-| Desktop | KDE Plasma (Wayland) |
-| Display manager | SDDM |
+| Kernel | `linux`, `linux-lts`, `linux-zen` |
+| Desktop | 14 environments, picked at build time — see below |
+| Display manager | per desktop (SDDM, GDM, LightDM, ...) |
 | Filesystem | Btrfs + Snapper |
 | Bootloader | GRUB |
 | Init | systemd |
@@ -65,11 +65,57 @@ This isn't a remaster with a different wallpaper. It's a system with **its own i
 | Installer | Calamares + Smart Installer Catalog |
 | Sandboxing | Flatpak |
 
+## Desktop environments
+
+GnegnoliOS is **multiplatform across desktop environments**: the ISO isn't
+built once for KDE, it's built once *per desktop*, selected interactively
+when you run `./scripts/build.sh`. Each desktop is a self-contained profile
+under [`profiles/desktops/`](profiles/desktops/) declaring its packages,
+display manager, session name, and default apps (terminal, file manager,
+editor, screenshot tool). Every desktop also gets its own branding package
+(`packages/gnegnolios-branding-<desktop>/`) so the GnegnoliOS visual identity
+(wallpapers, SDDM/LightDM/GDM theme, icons, color palette) is adapted to fit
+that DE's theming system rather than reused as-is.
+
+The build engine ([`scripts/lib/build-engine.sh`](scripts/lib/build-engine.sh),
+[`scripts/lib/profile-engine.sh`](scripts/lib/profile-engine.sh)) reads the
+chosen desktop's YAML, merges its packages on top of the base package set
+and selected kernel/feature profiles, wires up its display manager, and
+names the resulting ISO `gnegnolios-<desktop>-*.iso`. `config/distro.yaml`
+lists the available desktops and the default (`kde`); adding a new desktop
+means adding one `profiles/desktops/<id>.yaml` file plus a matching branding
+package — no changes to the build engine itself.
+
+| Desktop | Status | Display manager | Notes |
+|---|---|---|---|
+| KDE Plasma | stable | SDDM | default |
+| GNOME | stable | GDM | |
+| XFCE | stable | LightDM | |
+| Cinnamon | stable | LightDM | |
+| MATE | stable | LightDM | |
+| LXQt | stable | SDDM | |
+| Budgie | stable | LightDM | |
+| Hyprland | stable | SDDM | Wayland compositor, not a full DE |
+| COSMIC | experimental | cosmic-greeter | AUR-only packages, breaking changes upstream |
+| Deepin | experimental | LightDM | needs deepin-community repo in `pacman.conf` |
+| Pantheon | experimental | LightDM | AUR-only, not buildable via `mkarchiso` alone |
+| ROX Desktop | experimental | LightDM | unmaintained upstream, AUR-only |
+| LXDE | experimental | LXDM | superseded by LXQt, AUR-only |
+| Trinity (TDE) | experimental | TDM | KDE 3 fork, own unofficial repo |
+
+"Experimental" means the profile exists and is wired into the build, but its
+packages come from AUR/third-party repos that `mkarchiso`'s
+`packages.x86_64` mechanism can't resolve on its own — building those
+desktops into a bootable ISO currently requires pre-populating the local
+pacman repo with an AUR helper first. `./scripts/build.sh` still builds and
+warns rather than blocking, so this is a packaging limitation, not a
+missing feature.
+
 ## Visual identity
 
 <div align="center">
-<img src="packages/gnegnolios-branding/rootfs/usr/share/gnegnolios/sddm/login.png" width="49%" alt="SDDM login theme" />
-<img src="packages/gnegnolios-branding/rootfs/usr/share/gnegnolios/plymouth/logo.png" width="49%" alt="Plymouth boot logo" />
+<img src="imgs/login.png" width="49%" alt="SDDM login theme" />
+<img src="imgs/logo.png" width="49%" alt="GnegnoliOS mark" />
 <br/>
 <sub>Login screen (SDDM) — Boot splash (Plymouth)</sub>
 </div>
@@ -97,8 +143,8 @@ GnegnoliOS/
 ├── applications/    # apps developed for GnegnoliOS (Control Center, ...)
 ├── config/          # distro.yaml — single source of truth, installer.yaml — Smart Installer catalog
 ├── distro/          # archiso profile, everything needed to generate the ISO
-├── packages/        # custom packages (branding, calamares-config, installer-config, release, control-center...)
-├── profiles/        # desktop / kernel / feature package sets, combined at build time
+├── packages/        # custom packages: one branding package per desktop, calamares-config, installer-config, release, control-center...
+├── profiles/        # desktop / kernel / feature package sets, combined at build time (profiles/desktops/*.yaml)
 ├── calamares/        # installer configuration
 ├── scripts/         # build engine (scripts/lib/*.sh)
 └── docs/            # architecture, brand system, product brief, smart installer
@@ -142,9 +188,10 @@ cd GnegnoliOS
 
 The build:
 1. loads `config/distro.yaml` and validates the configuration;
-2. composes the package list from `profiles/base.yaml` + selected desktop, kernel, and feature profiles;
-3. compiles the custom packages in `packages/` (those with `enabled: true` and `build: true` in their `package.yaml`) and publishes them to a local pacman repository;
-4. generates the ISO via `mkarchiso`.
+2. prompts you to pick a desktop environment from `profiles/desktops/` (see [Desktop environments](#desktop-environments));
+3. composes the package list from `profiles/base.yaml` + the chosen desktop, kernel, and feature profiles;
+4. compiles the custom packages in `packages/` (those with `enabled: true` and `build: true` in their `package.yaml`), including the desktop-specific branding package, and publishes them to a local pacman repository;
+5. generates the ISO via `mkarchiso`, named `gnegnolios-<desktop>-*.iso`.
 
 Build layout (all under `build/`, gitignored):
 
