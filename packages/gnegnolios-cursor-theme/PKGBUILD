@@ -1,0 +1,19 @@
+pkgname=gnegnolios-cursor-theme
+pkgver=0.1
+pkgrel=1
+pkgdesc="GnegnoliOS cursor theme"
+arch=('any')
+license=('custom')
+depends=()
+
+install=gnegnolios-cursor-theme.install
+
+source=()
+
+sha256sums=()
+
+package() {
+
+    cp -a "$startdir/rootfs/." "$pkgdir"
+
+}

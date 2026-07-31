@@ -1,0 +1,8 @@
+post_install() {
+    gtk-update-icon-cache -f -t usr/share/icons/GnegnoliOS || true
+    gtk-update-icon-cache -f -t usr/share/icons/GnegnoliOS-Light || true
+}
+
+post_upgrade() {
+    post_install
+}

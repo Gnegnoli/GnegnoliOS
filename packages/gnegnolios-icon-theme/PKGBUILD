@@ -1,0 +1,19 @@
+pkgname=gnegnolios-icon-theme
+pkgver=0.1
+pkgrel=1
+pkgdesc="GnegnoliOS icon theme"
+arch=('any')
+license=('custom')
+depends=('gtk-update-icon-cache')
+
+install=gnegnolios-icon-theme.install
+
+source=()
+
+sha256sums=()
+
+package() {
+
+    cp -a "$startdir/rootfs/." "$pkgdir"
+
+}

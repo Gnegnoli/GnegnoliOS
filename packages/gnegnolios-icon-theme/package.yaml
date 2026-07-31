@@ -1,0 +1,19 @@
+name: gnegnolios-icon-theme
+
+description: |
+  Icon theme package for GnegnoliOS.
+
+version: "0.1"
+
+enabled: true
+
+build: true
+
+install:
+  iso: true
+  repository: true
+
+dependencies:
+  - gnegnolios-release
+
+build_system: makepkg
