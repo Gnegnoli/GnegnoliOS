@@ -1,0 +1,39 @@
+<!DOCTYPE Menu PUBLIC '-//freedesktop//DTD Menu 1.0//EN' 'http://www.freedesktop.org/standards/menu-spec/menu-1.0.dtd'>
+<Menu>
+ <Menu>
+  <Name>System</Name>
+  <Layout>
+   <Merge type="menus"/>
+   <Menuname>More</Menuname>
+   <Menuname>ScreenSavers</Menuname>
+   <Menuname>Terminal</Menuname>
+   <Merge type="files"/>
+   <Filename>nm-connection-editor.desktop</Filename>
+   <Filename>avahi-discover.desktop</Filename>
+   <Filename>com.raggesilver.BlackBox.desktop</Filename>
+   <Filename>blueman-manager.desktop</Filename>
+   <Filename>btop.desktop</Filename>
+   <Filename>org.kde.drkonqi.coredump.gui.desktop</Filename>
+   <Filename>org.kde.discover.desktop</Filename>
+   <Filename>org.kde.dolphin.desktop</Filename>
+   <Filename>lstopo.desktop</Filename>
+   <Filename>org.kde.kinfocenter.desktop</Filename>
+   <Filename>kvantummanager.desktop</Filename>
+   <Filename>org.kde.kmenuedit.desktop</Filename>
+   <Filename>qt5ct.desktop</Filename>
+   <Filename>qt6ct.desktop</Filename>
+   <Filename>org.kde.plasma-systemmonitor.desktop</Filename>
+   <Filename>systemsettings.desktop</Filename>
+   <Filename>org.pulseaudio.pavucontrol.desktop</Filename>
+  </Layout>
+  <Exclude>
+   <Filename>com.mitchellh.ghostty.desktop</Filename>
+  </Exclude>
+ </Menu>
+ <Menu>
+  <Name>.hidden</Name>
+  <Include>
+   <Filename>com.mitchellh.ghostty.desktop</Filename>
+  </Include>
+ </Menu>
+</Menu>

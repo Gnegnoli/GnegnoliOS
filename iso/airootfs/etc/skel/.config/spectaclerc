@@ -1,0 +1,13 @@
+[Annotations]
+annotationToolType=3
+rectangleFillColor=255,0,4,0
+rectangleStrokeWidth=9
+
+[General]
+ocrLanguages=enm
+
+[ImageSave]
+translatedScreenshotsFolder=Screenshots
+
+[VideoSave]
+translatedScreencastsFolder=Screencasts

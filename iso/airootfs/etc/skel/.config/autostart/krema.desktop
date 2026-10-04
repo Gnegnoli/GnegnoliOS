@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Krema Dock
+Comment=GnegnoliOS NERV Dock
+Exec=krema
+Terminal=false
+StartupNotify=false
+X-GNOME-Autostart-enabled=true

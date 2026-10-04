@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Live ISO only: creates the 'live' user (password: live) with passwordless
+# sudo, logs it into Plasma automatically and puts the installer on its desktop.
+set -euo pipefail
+
+LIVE_USER=live
+
+if ! id "$LIVE_USER" &>/dev/null; then
+    useradd -m -G wheel -s /bin/zsh -c "GnegnoliOS Live" "$LIVE_USER"
+    echo "$LIVE_USER:$LIVE_USER" | chpasswd
+fi
+
+install -d -m 750 /etc/sudoers.d
+echo "$LIVE_USER ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers.d/90-live
+chmod 440 /etc/sudoers.d/90-live
+
+cat > /etc/sddm.conf.d/zz-live-autologin.conf <<CONF
+[Autologin]
+User=$LIVE_USER
+Session=plasma
+CONF
+
+desktop="/home/$LIVE_USER/Desktop"
+install -d -o "$LIVE_USER" -g "$LIVE_USER" "$desktop"
+install -m 755 -o "$LIVE_USER" -g "$LIVE_USER" \
+    /usr/share/applications/gnegnolios-install.desktop "$desktop/"

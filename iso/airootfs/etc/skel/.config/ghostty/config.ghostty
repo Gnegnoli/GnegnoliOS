@@ -1,0 +1,46 @@
+# ╔══════════════════════════════════════════════╗
+# ║              GNEGNOLIOS GHOSTTY              ║
+# ╚══════════════════════════════════════════════╝
+
+# ─── Shell ─────────────────────────────────────
+command = /bin/zsh
+
+# ─── Font ───────────────────────────────────────
+font-family = JetBrainsMono Nerd Font
+font-size = 12
+
+# ─── Colori GnegnoliOS ─────────────────────────
+background = 090a0c
+foreground = d7d9dc
+
+cursor-color = c43c35
+cursor-style = block
+cursor-style-blink = true
+
+selection-background = 3a2020
+selection-foreground = ffffff
+
+# ─── Aspetto ────────────────────────────────────
+background-opacity = 0.92
+background-blur-radius = 12
+
+window-padding-x = 16
+window-padding-y = 14
+
+# ─── Scrollback ─────────────────────────────────
+scrollback-limit = 10000
+
+# ─── Shell integration ──────────────────────────
+shell-integration-features = cursor,sudo,title
+
+# ─── Clipboard ──────────────────────────────────
+copy-on-select = false
+clipboard-read = allow
+clipboard-write = allow
+
+# ─── Finestra ───────────────────────────────────
+window-save-state = always
+
+# ─── Comportamento ──────────────────────────────
+confirm-close-surface = false
+mouse-hide-while-typing = true

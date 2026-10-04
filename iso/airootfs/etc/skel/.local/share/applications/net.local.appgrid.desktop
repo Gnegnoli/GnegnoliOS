@@ -1,0 +1,7 @@
+[Desktop Entry]
+Exec=appgrid
+Name=GnegnoliOS AppGrid
+NoDisplay=true
+StartupNotify=false
+Type=Application
+X-KDE-GlobalAccel-CommandShortcut=true

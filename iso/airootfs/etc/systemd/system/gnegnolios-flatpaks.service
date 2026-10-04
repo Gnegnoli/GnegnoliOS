@@ -1,0 +1,13 @@
+[Unit]
+Description=GnegnoliOS: install Flatpak apps on first boot
+Wants=network-online.target
+After=network-online.target
+ConditionPathExists=!/var/lib/gnegnolios/flatpaks.done
+
+[Service]
+# exec, not oneshot: must not hold back the graphical session.
+Type=exec
+ExecStart=/usr/local/bin/gnegnolios-flatpaks
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,31 @@
+# Packages added on top of packages.captured (what this machine has installed).
+# One per line; '#' comments allowed. AUR packages go in aur.list instead.
+
+# ─── Live ISO boot (required by archiso) ─────────────────────────────────
+mkinitcpio
+mkinitcpio-archiso
+mkinitcpio-nfs-utils
+nbd
+syslinux
+memtest86+
+memtest86+-efi
+edk2-shell
+
+# ─── Installer ───────────────────────────────────────────────────────────
+arch-install-scripts
+dialog
+squashfs-tools
+dosfstools
+e2fsprogs
+gptfdisk
+parted
+rsync
+
+# ─── Hardware support for machines other than this one ───────────────────
+intel-ucode
+vulkan-intel
+lib32-vulkan-intel
+sof-firmware
+
+# ─── Runtime used by the first-boot Flatpak installer ────────────────────
+flatpak

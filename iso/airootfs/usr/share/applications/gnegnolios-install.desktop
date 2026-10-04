@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Install GnegnoliOS
+Comment=Install this system to disk
+Exec=ghostty -e sudo /usr/local/bin/gnegnolios-install
+Icon=system-software-install
+Terminal=false
+Categories=System;

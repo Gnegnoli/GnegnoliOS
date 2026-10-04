@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Installs the Flatpak apps listed in /etc/gnegnolios/flatpaks.list from
+# Flathub. Retried at every boot until it succeeds once.
+set -euo pipefail
+
+LIST=/etc/gnegnolios/flatpaks.list
+DONE=/var/lib/gnegnolios/flatpaks.done
+
+mapfile -t apps < <(grep -v '^[[:space:]]*#' "$LIST" | grep .)
+flatpak remote-add --system --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+if ((${#apps[@]})); then
+    flatpak install --system -y --noninteractive flathub "${apps[@]}"
+fi
+install -d /var/lib/gnegnolios
+touch "$DONE"

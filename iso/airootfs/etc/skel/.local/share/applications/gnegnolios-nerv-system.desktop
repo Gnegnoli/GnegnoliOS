@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=GNEGNOLIOS // NERV SYSTEM
+Comment=GnegnoliOS NERV System
+Exec=ghostty
+Icon=utilities-terminal
+Terminal=false
+Type=Application
+Categories=System;

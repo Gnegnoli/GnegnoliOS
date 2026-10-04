@@ -1,0 +1,52 @@
+# ╔══════════════════════════════════════════════╗
+# ║              GNEGNOLIOS GHOSTTY             ║
+# ╚══════════════════════════════════════════════╝
+
+font-family = JetBrainsMono Nerd Font
+font-size = 13
+
+# ─── GnegnoliOS ────────────────────────────────
+
+background = 09090b
+foreground = e4e4e7
+
+background-opacity = 0.94
+background-blur-radius = 18
+
+cursor-color = c1121f
+cursor-style = block
+cursor-style-blink = true
+
+selection-background = 4a1015
+selection-foreground = ffffff
+
+window-padding-x = 16
+window-padding-y = 14
+
+scrollback-limit = 10000
+
+confirm-close-surface = false
+copy-on-select = false
+mouse-hide-while-typing = true
+
+shell-integration-features = cursor,sudo,title
+
+# ─── ANSI ──────────────────────────────────────
+
+palette = 0=09090b
+palette = 1=c1121f
+palette = 2=7f1d1d
+palette = 3=991b1b
+palette = 4=7f1d1d
+palette = 5=9f1239
+palette = 6=881337
+palette = 7=d4d4d8
+
+palette = 8=3f3f46
+palette = 9=ef233c
+palette = 10=b91c1c
+palette = 11=dc2626
+palette = 12=dc2626
+palette = 13=e11d48
+palette = 14=fb7185
+palette = 15=f4f4f5

@@ -1,0 +1,6 @@
+[General]
+BackgroundStyle=3
+IconSpacing=1
+PinnedLaunchers=applications:org.kde.dolphin.desktop,applications:com.mitchellh.ghostty.desktop
+ShadowEnabled=true
+VisibilityMode=2

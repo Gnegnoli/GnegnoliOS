@@ -1,0 +1,74 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+[╭─](#7f1d1d)[  ](bold #ef233c)[GNEGNOLIOS](bold #ef233c) \
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_status\
+$cmd_duration
+[╰─](#7f1d1d)$character"""
+
+add_newline = true
+
+[character]
+success_symbol = "[❯](bold #ef233c)"
+error_symbol = "[❯](bold #c1121f)"
+vimcmd_symbol = "[❮](bold #ef233c)"
+
+[username]
+show_always = true
+style_user = "bold #d4d4d8"
+format = " [󰀄 $user](#d4d4d8)"
+
+[hostname]
+ssh_only = false
+format = "[@$hostname](#71717a)"
+
+[directory]
+style = "bold #ef233c"
+format = " [ $path]($style) "
+truncation_length = 3
+truncate_to_repo = false
+
+[git_branch]
+symbol = "󰘬 "
+style = "bold #fb7185"
+format = "[$symbol$branch]($style) "
+
+[git_status]
+style = "bold #ef233c"
+format = "([$all_status$ahead_behind]($style))"
+
+[cmd_duration]
+min_time = 500
+format = " [󱎫 $duration](#71717a)"
+
+[package]
+disabled = true
+
+[nodejs]
+symbol = " "
+style = "#ef233c"
+
+[python]
+symbol = " "
+style = "#ef233c"
+
+[rust]
+symbol = " "
+style = "#ef233c"
+
+[docker_context]
+symbol = " "
+style = "#ef233c"
+format = "[$symbol$context](#ef233c) "
+
+[time]
+disabled = false
+format = "[$time](#52525b) "
+time_format = "%H:%M"
+
+[os]
+disabled = true

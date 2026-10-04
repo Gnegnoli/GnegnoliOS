@@ -1,0 +1,12 @@
+[Unit]
+Description=GnegnoliOS live session setup
+ConditionKernelCommandLine=archisobasedir
+Before=display-manager.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/gnegnolios-live-setup
+
+[Install]
+WantedBy=multi-user.target

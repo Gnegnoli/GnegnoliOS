@@ -1,0 +1,347 @@
+#!/usr/bin/env bash
+# GnegnoliOS installer.
+#
+# Copies the live system (the ISO's squashfs image) onto a disk, so the
+# installed machine is identical to the live one, then turns it into a normal
+# installed system: user, locale, fstab, initramfs, GRUB. Works offline;
+# network is only needed later for the first-boot Flatpak apps.
+set -euo pipefail
+
+TITLE="GnegnoliOS Installer"
+TARGET=/mnt/gnegnolios
+LOG=/var/log/gnegnolios-install.log
+
+[[ $EUID -eq 0 ]] || exec sudo "$0" "$@"
+exec 3>&1
+: > "$LOG"
+
+# ─── UI helpers ───────────────────────────────────────────────────────────
+# dialog writes answers to stderr; swap so $(ui ...) captures them.
+ui()    { dialog --backtitle "$TITLE" "$@" 2>&1 1>&3; }
+abort() { clear; echo "Installation cancelled."; exit 1; }
+fail()  {
+    dialog --backtitle "$TITLE" --title "Error" \
+        --msgbox "$1\n\nDetails: $LOG" 12 72 || true
+    clear; exit 1
+}
+step()  { dialog --backtitle "$TITLE" --infobox "$1" 5 72; echo "== $1" >> "$LOG"; }
+run()   { "$@" >> "$LOG" 2>&1 || fail "Command failed: $*"; }
+chr()   { run arch-chroot "$TARGET" "$@"; }
+
+cleanup() { umount -R "$TARGET" 2>/dev/null || true; }
+trap cleanup EXIT
+
+# ─── Environment ──────────────────────────────────────────────────────────
+if [[ -d /sys/firmware/efi/efivars ]]; then UEFI=1; else UEFI=0; fi
+
+SFS="$(compgen -G '/run/archiso/bootmnt/*/x86_64/airootfs.sfs' | head -n1 || true)"
+[[ -n $SFS ]] || SFS="$(compgen -G '/run/archiso/copytoram/airootfs.sfs' | head -n1 || true)"
+
+# Device the live medium is on, so it is never offered as a target.
+LIVE_DEV=""
+if src="$(findmnt -no SOURCE /run/archiso/bootmnt 2>/dev/null)"; then
+    LIVE_DEV="/dev/$(lsblk -no PKNAME "$src" 2>/dev/null | head -n1)"
+fi
+
+part() { # part /dev/sda 1 → /dev/sda1, /dev/nvme0n1 1 → /dev/nvme0n1p1
+    if [[ $1 =~ [0-9]$ ]]; then echo "${1}p$2"; else echo "$1$2"; fi
+}
+
+# ─── Questions ────────────────────────────────────────────────────────────
+ui --title "Welcome" --yes-label "Start" --no-label "Quit" --yesno \
+"This installs GnegnoliOS exactly as it is in this live session:
+packages, desktop, theme and settings.
+
+Boot mode: $( ((UEFI)) && echo UEFI || echo "Legacy BIOS" )
+
+You will be asked a few questions. Nothing is written to disk
+until the final confirmation." 13 68 || abort
+
+[[ -n $SFS ]] || ui --title "Warning" --yesno \
+"The live system image was not found; the running system will be
+copied instead (slower, includes live-session changes). Continue?" 9 70 || abort
+
+MODE="$(ui --title "Disk setup" --menu "How do you want to install?" 12 72 2 \
+    erase  "Erase an entire disk (recommended)" \
+    manual "Use existing partitions (dual boot)")" || abort
+
+disk_menu=()
+while read -r line; do
+    eval "$line"   # NAME= SIZE= TYPE= MODEL=
+    [[ $TYPE == disk && $NAME != "$LIVE_DEV" ]] || continue
+    disk_menu+=("$NAME" "$SIZE  ${MODEL:-unknown}")
+done < <(lsblk -dpnP -o NAME,SIZE,TYPE,MODEL)
+((${#disk_menu[@]})) || fail "No usable disk found."
+
+part_menu() { # partitions of all disks except the live medium
+    local line NAME SIZE TYPE FSTYPE LABEL PKNAME
+    while read -r line; do
+        eval "$line"
+        [[ $TYPE == part && /dev/$PKNAME != "$LIVE_DEV" ]] || continue
+        printf '%s\n%s\n' "$NAME" "$SIZE ${FSTYPE:-unformatted} ${LABEL}"
+    done < <(lsblk -pnP -o NAME,SIZE,TYPE,FSTYPE,LABEL,PKNAME)
+}
+
+if [[ $MODE == erase ]]; then
+    DISK="$(ui --title "Target disk" --menu \
+        "Choose the disk to install on. EVERYTHING on it will be erased." \
+        16 72 8 "${disk_menu[@]}")" || abort
+    if ((UEFI)); then
+        ESP="$(part "$DISK" 1)"; ROOT="$(part "$DISK" 2)"
+    else
+        ROOT="$(part "$DISK" 2)"
+    fi
+    FORMAT_ESP=1
+else
+    mapfile -t pm < <(part_menu)
+    ((${#pm[@]})) || fail "No partitions found. Create them first (e.g. with KDE Partition Manager or cfdisk)."
+    ROOT="$(ui --title "Root partition" --menu \
+        "Partition for GnegnoliOS. It will be FORMATTED (ext4)." 18 76 10 "${pm[@]}")" || abort
+    DISK="/dev/$(lsblk -no PKNAME "$ROOT" | head -n1)"
+    if ((UEFI)); then
+        ESP="$(ui --title "EFI partition" --menu \
+            "Existing EFI system partition (FAT32). It is NOT formatted, so other systems keep booting." \
+            18 76 10 "${pm[@]}")" || abort
+        [[ $ESP != "$ROOT" ]] || fail "The EFI partition must differ from the root partition."
+        FORMAT_ESP=0
+    fi
+fi
+
+while :; do
+    HOSTNAME_="$(ui --title "Computer name" --inputbox "Hostname:" 8 50 "gnegnolios")" || abort
+    [[ $HOSTNAME_ =~ ^[a-zA-Z0-9][a-zA-Z0-9-]{0,62}$ ]] && break
+    ui --msgbox "Use letters, digits and '-' only." 6 50 || true
+done
+
+FULLNAME="$(ui --title "User" --inputbox "Your full name (optional):" 8 50 "")" || abort
+while :; do
+    USERNAME="$(ui --title "User" --inputbox "Username (lowercase):" 8 50 "")" || abort
+    [[ $USERNAME =~ ^[a-z_][a-z0-9_-]{0,31}$ && $USERNAME != live && $USERNAME != root ]] && break
+    ui --msgbox "Invalid username: lowercase letters, digits, '-' and '_' only." 6 64 || true
+done
+while :; do
+    PASS1="$(ui --title "Password" --insecure --passwordbox "Password for $USERNAME:" 8 50)" || abort
+    PASS2="$(ui --title "Password" --insecure --passwordbox "Repeat password:" 8 50)" || abort
+    [[ -n $PASS1 && $PASS1 == "$PASS2" ]] && break
+    ui --msgbox "Passwords are empty or do not match." 6 50 || true
+done
+
+while :; do
+    TIMEZONE="$(ui --title "Time zone" --inputbox "Time zone (Region/City):" 8 50 "Europe/Rome")" || abort
+    [[ -f /usr/share/zoneinfo/$TIMEZONE ]] && break
+    ui --msgbox "Unknown time zone: $TIMEZONE" 6 50 || true
+done
+
+KEYMAP="$(ui --title "Keyboard" --default-item us --menu "Keyboard layout:" 15 50 7 \
+    us "English (US)" it "Italian" uk "English (UK)" de "German" \
+    fr "French" es "Spanish" ch "Swiss")" || abort
+case $KEYMAP in uk) XKB=gb ;; *) XKB=$KEYMAP ;; esac
+
+LOCALE="$(ui --title "Language" --default-item en_US.UTF-8 --menu "System language:" 14 50 6 \
+    en_US.UTF-8 "English (US)" it_IT.UTF-8 "Italiano" de_DE.UTF-8 "Deutsch" \
+    fr_FR.UTF-8 "Français" es_ES.UTF-8 "Español")" || abort
+
+AUTOLOGIN=0
+ui --title "Login" --defaultno --yesno "Log in automatically without asking for the password?" 7 60 \
+    && AUTOLOGIN=1
+
+FLATPAKS=0
+if [[ -s /etc/gnegnolios/flatpaks.list ]]; then
+    ui --title "Apps" --yesno \
+"Install these Flatpak apps automatically on first boot (needs internet)?
+
+$(cat /etc/gnegnolios/flatpaks.list)" 22 70 && FLATPAKS=1
+fi
+
+summary="Disk setup:   $MODE
+Target disk:  $DISK
+Root:         $ROOT  (will be formatted ext4)"
+((UEFI)) && summary+="
+EFI:          $ESP  ($( ((FORMAT_ESP)) && echo "will be formatted" || echo "kept, not formatted"))"
+summary+="
+Hostname:     $HOSTNAME_
+User:         $USERNAME
+Time zone:    $TIMEZONE
+Keyboard:     $KEYMAP
+Language:     $LOCALE
+Autologin:    $( ((AUTOLOGIN)) && echo yes || echo no)
+Flatpak apps: $( ((FLATPAKS)) && echo yes || echo no)"
+[[ $MODE == erase ]] && summary+="
+
+ALL DATA ON $DISK WILL BE LOST."
+
+ui --title "Confirm" --defaultno --yes-label "Install" --no-label "Cancel" \
+    --yesno "$summary" 22 72 || abort
+
+# ─── Disk ─────────────────────────────────────────────────────────────────
+step "Preparing disk..."
+umount -R "$TARGET" 2>/dev/null || true
+if [[ $MODE == erase ]]; then
+    for p in $(lsblk -lnpo NAME "$DISK" | tail -n +2); do umount "$p" 2>/dev/null || true; done
+    swapoff -a 2>/dev/null || true
+    run wipefs -af "$DISK"
+    run sgdisk --zap-all "$DISK"
+    if ((UEFI)); then
+        run sgdisk -n1:0:+1G -t1:ef00 -c1:EFI -n2:0:0 -t2:8304 -c2:GnegnoliOS "$DISK"
+    else
+        run sgdisk -n1:0:+1M -t1:ef02 -c1:BIOS -n2:0:0 -t2:8304 -c2:GnegnoliOS "$DISK"
+    fi
+    run partprobe "$DISK"
+    run udevadm settle
+fi
+
+step "Formatting $ROOT..."
+umount "$ROOT" 2>/dev/null || true
+run mkfs.ext4 -F -L GnegnoliOS "$ROOT"
+if ((UEFI)) && ((FORMAT_ESP)); then
+    run mkfs.fat -F 32 -n EFI "$ESP"
+fi
+
+run mkdir -p "$TARGET"
+run mount "$ROOT" "$TARGET"
+if ((UEFI)); then
+    run mkdir -p "$TARGET/boot/efi"
+    run mount "$ESP" "$TARGET/boot/efi"
+fi
+
+# ─── System copy ──────────────────────────────────────────────────────────
+if [[ -n $SFS ]]; then
+    echo "== Copying $SFS" >> "$LOG"
+    unsquashfs -f -d "$TARGET" -percentage "$SFS" 2>> "$LOG" |
+        dialog --backtitle "$TITLE" --title "Installing" \
+            --gauge "Copying GnegnoliOS to disk..." 7 72 0 ||
+        run unsquashfs -f -q -d "$TARGET" "$SFS"
+else
+    step "Copying the running system (this takes a while)..."
+    run rsync -aAXH --info=none / "$TARGET/" \
+        --exclude={/dev/*,/proc/*,/sys/*,/run/*,/tmp/*,/mnt/*,/media/*,/lost+found,/home/live,/var/log/gnegnolios-install.log}
+fi
+
+# mkarchiso empties /boot; the kernel image also lives in the module tree.
+step "Installing kernel..."
+kernels=0
+for m in "$TARGET"/usr/lib/modules/*/; do
+    [[ -f $m/pkgbase && -f $m/vmlinuz ]] || continue
+    pkgbase="$(<"$m/pkgbase")"
+    run install -m 644 "$m/vmlinuz" "$TARGET/boot/vmlinuz-$pkgbase"
+    preset="$TARGET/etc/mkinitcpio.d/$pkgbase.preset"
+    [[ -f $preset ]] || cat > "$preset" <<EOF
+ALL_kver="/boot/vmlinuz-$pkgbase"
+PRESETS=('default')
+default_image="/boot/initramfs-$pkgbase.img"
+EOF
+    kernels=$((kernels + 1))
+done
+((kernels)) || fail "No kernel found in the copied system."
+
+# ─── Remove live-session leftovers ────────────────────────────────────────
+step "Configuring system..."
+rm -f  "$TARGET"/etc/mkinitcpio.conf.d/archiso.conf \
+       "$TARGET"/etc/systemd/system/etc-pacman.d-gnupg.mount \
+       "$TARGET"/etc/systemd/system/pacman-init.service \
+       "$TARGET"/etc/systemd/system/multi-user.target.wants/pacman-init.service \
+       "$TARGET"/etc/systemd/system/gnegnolios-live-setup.service \
+       "$TARGET"/etc/systemd/system/multi-user.target.wants/gnegnolios-live-setup.service \
+       "$TARGET"/etc/systemd/system-generators/systemd-gpt-auto-generator \
+       "$TARGET"/etc/sddm.conf.d/zz-live-autologin.conf \
+       "$TARGET"/etc/sudoers.d/90-live \
+       "$TARGET"/usr/share/applications/gnegnolios-install.desktop \
+       "$TARGET"/usr/local/bin/gnegnolios-live-setup \
+       "$TARGET"/etc/machine-id
+rm -rf "$TARGET"/etc/pacman.d/gnupg "$TARGET"/home/live
+sed -i '/^live:/d' "$TARGET"/etc/{passwd,shadow,group,gshadow} 2>/dev/null || true
+
+# Same initramfs hooks as the original machine (systemd-based).
+cat > "$TARGET/etc/mkinitcpio.conf.d/gnegnolios.conf" <<'EOF'
+HOOKS=(base systemd autodetect microcode modconf kms keyboard sd-vconsole block filesystems fsck)
+EOF
+
+genfstab -U "$TARGET" > "$TARGET/etc/fstab" 2>> "$LOG" || fail "genfstab failed."
+
+# ─── Locale, time, identity ───────────────────────────────────────────────
+sed -i 's/^\([^#]\)/#\1/' "$TARGET/etc/locale.gen"
+for l in en_US.UTF-8 "$LOCALE"; do
+    sed -i "s/^#\s*\(${l//./\\.} UTF-8\)/\1/" "$TARGET/etc/locale.gen"
+    grep -q "^${l//./\\.} UTF-8" "$TARGET/etc/locale.gen" || echo "$l UTF-8" >> "$TARGET/etc/locale.gen"
+done
+chr locale-gen
+echo "LANG=$LOCALE" > "$TARGET/etc/locale.conf"
+echo "KEYMAP=$KEYMAP" > "$TARGET/etc/vconsole.conf"
+mkdir -p "$TARGET/etc/X11/xorg.conf.d"
+cat > "$TARGET/etc/X11/xorg.conf.d/00-keyboard.conf" <<EOF
+Section "InputClass"
+        Identifier "system-keyboard"
+        MatchIsKeyboard "on"
+        Option "XkbLayout" "$XKB"
+EndSection
+EOF
+ln -sf "/usr/share/zoneinfo/$TIMEZONE" "$TARGET/etc/localtime"
+chr hwclock --systohc
+echo "$HOSTNAME_" > "$TARGET/etc/hostname"
+cat > "$TARGET/etc/hosts" <<EOF
+127.0.0.1   localhost
+::1         localhost
+127.0.1.1   $HOSTNAME_.localdomain $HOSTNAME_
+EOF
+chr systemd-machine-id-setup
+
+# ─── User ─────────────────────────────────────────────────────────────────
+step "Creating user $USERNAME..."
+chr useradd -m -G wheel -s /bin/zsh -c "$FULLNAME" "$USERNAME"
+printf '%s:%s\n' "$USERNAME" "$PASS1" | arch-chroot "$TARGET" chpasswd 2>> "$LOG" ||
+    fail "Setting the password failed."
+chr passwd -l root
+install -d -m 750 "$TARGET/etc/sudoers.d"
+echo '%wheel ALL=(ALL:ALL) ALL' > "$TARGET/etc/sudoers.d/10-wheel"
+chmod 440 "$TARGET/etc/sudoers.d/10-wheel"
+
+# Keyboard layout for the Plasma session too.
+kxkb="$TARGET/home/$USERNAME/.config/kxkbrc"
+if [[ ! -f $kxkb ]]; then
+    printf '[Layout]\nLayoutList=%s\nUse=true\n' "$XKB" > "$kxkb"
+    chr chown "$USERNAME:$USERNAME" "/home/$USERNAME/.config/kxkbrc"
+fi
+
+if ((AUTOLOGIN)); then
+    printf '[Autologin]\nUser=%s\nSession=plasma\n' "$USERNAME" \
+        > "$TARGET/etc/sddm.conf.d/autologin.conf"
+fi
+if ((FLATPAKS)); then
+    ln -sf /etc/systemd/system/gnegnolios-flatpaks.service \
+        "$TARGET/etc/systemd/system/multi-user.target.wants/gnegnolios-flatpaks.service"
+fi
+
+# ─── Pacman keyring, initramfs, bootloader ────────────────────────────────
+step "Initializing pacman keyring..."
+chr pacman-key --init
+chr pacman-key --populate
+
+step "Building initramfs..."
+chr mkinitcpio -P
+
+step "Installing GRUB..."
+grub_def="$TARGET/etc/default/grub"
+sed -i -e 's/^GRUB_DISTRIBUTOR=.*/GRUB_DISTRIBUTOR="GnegnoliOS"/' \
+       -e 's/^GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet"/' \
+       -e 's/^#\?GRUB_DISABLE_OS_PROBER=.*/GRUB_DISABLE_OS_PROBER=false/' "$grub_def"
+grep -q '^GRUB_DISABLE_OS_PROBER=' "$grub_def" || echo 'GRUB_DISABLE_OS_PROBER=false' >> "$grub_def"
+if ((UEFI)); then
+    chr grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GnegnoliOS
+    # Fallback path too, for firmware that forgets NVRAM boot entries.
+    chr grub-install --target=x86_64-efi --efi-directory=/boot/efi --removable
+else
+    chr grub-install --target=i386-pc "$DISK"
+fi
+chr grub-mkconfig -o /boot/grub/grub.cfg
+
+sync
+cp "$LOG" "$TARGET/var/log/" 2>/dev/null || true
+cleanup
+
+if ui --title "Done" --yes-label "Reboot" --no-label "Stay" --yesno \
+"GnegnoliOS is installed.
+
+Remove the installation medium and reboot." 9 60; then
+    systemctl reboot
+fi
+clear
